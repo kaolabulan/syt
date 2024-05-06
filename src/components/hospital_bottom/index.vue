@@ -37,8 +37,8 @@
         font-size: 16px;
         span{
           margin-right: 10px;
-        }
 
+        }
       }
     }
 
