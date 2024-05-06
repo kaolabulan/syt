@@ -38,6 +38,7 @@
         span{
           margin-right: 10px;
         }
+
       }
     }
 
