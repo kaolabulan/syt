@@ -43,7 +43,7 @@
           margin-right: 10px;
         }
         p{
-          font-size: 20px;
+          font-size: 22px;
           color: skyblue;
         }
         display: flex;

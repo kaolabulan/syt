@@ -2,10 +2,10 @@
   <div class="container">
     <HospitalTop/>
     <div class="content">
-      中间显示区域
+      <p>中间显示区域</p>
     </div>
     <HospitalBottom/>
-    <div>12344</div>
+
   </div>
 </template>
 
@@ -17,9 +17,13 @@
   .container{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
     .content{
-
+      margin-top: 70px;
+      width: 1200px;
+      min-height: 700px;
+      background-color: skyblue;
     }
+
   }
 </style>
