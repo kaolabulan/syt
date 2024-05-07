@@ -2,9 +2,10 @@
   <div class="container">
     <HospitalTop/>
     <div class="content">
-      <p>中间显示区域</p>
+      <router-view/>
     </div>
     <HospitalBottom/>
+
 
   </div>
 </template>
@@ -22,7 +23,6 @@
       margin-top: 70px;
       width: 1200px;
       min-height: 700px;
-      background-color: skyblue;
     }
 
   }
