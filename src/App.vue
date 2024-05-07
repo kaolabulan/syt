@@ -2,15 +2,17 @@
   <div class="container">
     <HospitalTop/>
     <div class="content">
-      <router-view/>
+      <el-config-provider :locale="locale">
+        <router-view/>
+
+      </el-config-provider>
     </div>
     <HospitalBottom/>
-
-
   </div>
 </template>
 
 <script setup lang="ts">
+import locale from "element-plus/es/locale/lang/zh-cn";
 
 </script>
 
