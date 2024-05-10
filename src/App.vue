@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import locale from "element-plus/es/locale/lang/zh-cn";
 
+
 </script>
 
 <style scoped lang="scss">
