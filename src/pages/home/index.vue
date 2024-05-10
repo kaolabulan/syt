@@ -4,6 +4,7 @@
   import Level from  './level/index.vue'
   import Region from './region/index.vue'
   import Card from  './card/index.vue'
+  import Tip from './tip/index.vue'
 
   import type {Content,HospitalResponseData} from "@/api/home/type.ts";
   //引入请求
@@ -85,7 +86,7 @@
 
       <!--右侧  -->
       <el-col :span="4">
-        456
+        <Tip/>
       </el-col>
 
     </el-row>

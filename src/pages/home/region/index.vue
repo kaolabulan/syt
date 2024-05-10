@@ -8,7 +8,6 @@
   const regionArr = ref<HospitalLevelAndRegionArr>([])
   const getRegion =async ()=>{
     const result:HospitalLevelAndRegionResponseData = await reqLevelAndRegion('Beijin')
-    console.log(result)
     if (result.code===200){
       regionArr.value = result.data
     }
