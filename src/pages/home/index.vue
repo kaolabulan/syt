@@ -9,6 +9,8 @@
   //引入请求
   import {reqGetHospital} from "@/api/home";
   import {onMounted, ref} from "vue";
+  import {useRouter} from "vue-router";
+  const router = useRouter()
   //分页器页码
   const pageNo = ref<number>(1)
   //每页几条数据
@@ -42,6 +44,10 @@
     districtCode.value = region
     getHospitalInfo()
   }
+
+  const goDetail = ()=>{
+    router.push('/detail')
+  }
 </script>
 
 <template>
@@ -61,9 +67,10 @@
         <!-- 地区分类组件-->
         <Region @getRegion="getRegion"/>
         <!-- 卡片组件-->
-        <div class="hospital">
+        <div @click="goDetail" class="hospital" v-if="hospitalArr.length>0">
           <Card class="item" v-for="(item,index) in hospitalArr" :key="index" :hospitalInfo="item"/>
         </div>
+        <el-empty v-else description="没有医院的信息"/>
         <!--分页器 -->
         <el-pagination
             v-model:current-page="pageNo"

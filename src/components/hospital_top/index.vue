@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import {useRouter} from "vue-router";
+const router = useRouter()
 
+const goHome = ()=>{
+  router.push('/home')
+}
 </script>
 
 <template>
   <div class="top">
     <div class="content">
-      <div class="left">
+      <div class="left" @click="goHome">
         <img src="@/assets/images/logo.png" alt="">
         <p>预约挂号统一平台</p>
       </div>
@@ -37,6 +42,7 @@
       align-items: center;
 
       .left{
+        cursor: pointer;
         img{
           width: 50px;
           height: 50px;
