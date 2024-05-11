@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import {Document, Menu as IconMenu, Warning, Setting,Search,HomeFilled} from '@element-plus/icons-vue'
 import {useRouter,useRoute} from "vue-router";
+import {onMounted} from "vue";
+import {useHospitalDetailStore} from "@/store/hospitalDetailStore.ts";
+
 const router = useRouter()
 const route = useRoute()
-
+const detailStore = useHospitalDetailStore()
 const changeActive = (path:string)=>{
-  router.push({path})
+  router.push({path,query:route.query})
 }
+
+onMounted(()=>detailStore.getHospitalRegister(<string>route.query.hoscode))
 </script>
 
 <template>

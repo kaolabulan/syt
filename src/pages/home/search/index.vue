@@ -17,7 +17,6 @@ export default {
   const hosname = ref<string>('')
   const getFetch =async (value:string,cb:any)=>{
     const res:HospitalInfo = await reqHospitalInfo(value)
-    console.log(res.data)
     const showData = res.data.map(item=>{
       return{
         value:item.hosname,
@@ -28,15 +27,18 @@ export default {
   }
   //点击推荐项
   const goDetail = (item:any)=>{
-    console.log(item)
-    router.push('/hospital')
+    router.push(`/hospital?hoscode=${item.hoscode}`)
   }
 
 </script>
 
 <template>
   <div class="search">
-    <el-autocomplete @select="goDetail" :trigger-on-focus="false" :fetch-suggestions="getFetch" clearable placeholder="请输入医院的名称" v-model="hosname"/>
+    <el-autocomplete @select="goDetail"
+                     :trigger-on-focus="false"
+                     :fetch-suggestions="getFetch"
+                     clearable placeholder="请输入医院的名称"
+                     v-model="hosname"/>
     <el-button type="primary" :icon="Search">搜索</el-button>
   </div>
 

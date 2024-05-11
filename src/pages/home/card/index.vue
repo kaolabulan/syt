@@ -1,11 +1,17 @@
 <script setup lang="ts">
-  defineProps(['hospitalInfo'])
+  import {useRouter} from "vue-router";
+
+  const props = defineProps(['hospitalInfo'])
+  const router = useRouter()
+  const goDetail = ()=>{
+    router.push(`/hospital?hoscode=${props.hospitalInfo.hoscode}`)
+  }
 </script>
 
 <template>
 
   <el-card shadow="hover" style="max-width: 480px">
-    <div class="content">
+    <div class="content" @click="goDetail">
       <div class="left">
         <div class="hospital_name">{{ hospitalInfo.hosname }}</div>
         <div class="tip">
@@ -56,6 +62,7 @@
   .right img{
     width: 50px;
     height: 50px;
+    border-radius: 50%;
   }
 }
 </style>
