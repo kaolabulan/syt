@@ -47,7 +47,7 @@
   }
 
   const goDetail = ()=>{
-    router.push('/detail')
+    router.push('/hospital')
   }
 </script>
 

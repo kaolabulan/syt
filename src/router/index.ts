@@ -9,8 +9,31 @@ export default createRouter({
       component: () => import('@/pages/home/index.vue')
     },
     {
-      path:'/detail',
-      component:()=>import('@/pages/hospital_detail/index.vue')
+      path:'/hospital',
+      component:()=>import('@/pages/hospital_detail/index.vue'),
+      children:[
+        {
+          path:'',
+          component:()=>import('@/pages/hospital_detail/register/index.vue')
+        },
+        {
+          path:'detail',
+          component:()=>import('@/pages/hospital_detail/detail/index.vue')
+        },
+        {
+          path:'notice',
+          component:()=>import('@/pages/hospital_detail/notice/index.vue')
+        },
+        {
+          path:'close',
+          component:()=>import('@/pages/hospital_detail/close/index.vue')
+        },
+        {
+          path:'search',
+          component:()=>import('@/pages/hospital_detail/search/index.vue')
+        },
+
+      ]
     },
     //重定向
     {

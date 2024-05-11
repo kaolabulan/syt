@@ -29,7 +29,7 @@ export default {
   //点击推荐项
   const goDetail = (item:any)=>{
     console.log(item)
-    router.push('/detail')
+    router.push('/hospital')
   }
 
 </script>
