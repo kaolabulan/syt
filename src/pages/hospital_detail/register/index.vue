@@ -1,7 +1,10 @@
 <script setup lang="ts">
   import {useHospitalDetailStore} from "@/store/hospitalDetailStore.ts";
-  import {onMounted, onUnmounted, ref} from "vue";
+  import { ref} from "vue";
+  import {useUserStore} from "@/store/userStore.ts";
+  // import {onMounted, onUnmounted,} from 'vue'
   const detailStore = useHospitalDetailStore()
+  const userStore = useUserStore()
 
   //高亮
   const isActive = ref<number>(0)
@@ -41,6 +44,10 @@
   // }
   // onMounted(()=> department.addEventListener('scroll',onScroll))
   // onUnmounted(()=>department.removeEventListener('scroll',onScroll))
+
+  const showLogin = ()=>{
+    userStore.dialogVisible = true
+  }
 </script>
 
 <template>
@@ -97,7 +104,7 @@
         <div class="showDepartment" v-for="department in detailStore.departmentInfo" :key="department.depcode">
           <h1 class="cur">{{department.depname}}</h1>
           <ul>
-            <li v-for="item in department.children" :key="item.depcode">
+            <li @click="showLogin" v-for="item in department.children" :key="item.depcode">
               {{item.depname}}
             </li>
           </ul>

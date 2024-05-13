@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
-const router = useRouter()
+import {useUserStore} from "@/store/userStore.ts";
 
+const router = useRouter()
+const userStore = useUserStore()
 const goHome = ()=>{
   router.push('/home')
+}
+
+//登录
+const login = ()=>{
+  userStore.dialogVisible = true
 }
 </script>
 
@@ -16,7 +23,7 @@ const goHome = ()=>{
       </div>
       <div class="right">
         <p class="help">帮助中心</p>
-        <p class="login">登录/注册</p>
+        <p class="login" @click="login">登录/注册</p>
       </div>
     </div>
   </div>

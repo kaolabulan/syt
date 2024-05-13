@@ -8,6 +8,7 @@
       </el-config-provider>
     </div>
     <HospitalBottom/>
+    <Login/>
   </div>
 </template>
 
