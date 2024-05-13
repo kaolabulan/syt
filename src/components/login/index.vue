@@ -2,7 +2,10 @@
   import {useUserStore} from "@/store/userStore.ts";
   //引入图标
   import { User, Lock } from "@element-plus/icons-vue";
-  import {ref} from "vue";
+  import {reactive, ref, computed, onMounted} from "vue";
+  import {reqSendPhone} from "@/api/hospital";
+  import {get} from "axios";
+
   const userStore = useUserStore()
 
   //切换登录
@@ -10,7 +13,27 @@
   const changeScene=()=>{
     loginType.value = !loginType.value
   }
+  //登录输入
+  const loginParams = reactive({
+    phone:'',
+    code:'',
+  })
+  //计算输入是否合法
+  //计算出当前表单元素收集的内容是否手机号码格式
+  let isPhone = computed(() => {
+    //手机号码正则表达式
+    const reg = /^1((34[0-8])|(8\d{2})|(([35][0-35-9]|4[579]|66|7[35678]|9[1389])\d{1}))\d{7}$/;
+    //返回布尔值:真代表手机号码、假代表的即为不是手机号码
+    return reg.test(loginParams.phone);
+  });
 
+  //获取验证码 发请求
+  const getCode =async ()=>{
+    const res:any = await reqSendPhone(loginParams.phone)
+    if (res.code===200){
+      loginParams.code=res.data
+    }
+  }
 </script>
 <script lang="ts">
 export default {
@@ -27,13 +50,13 @@ export default {
             <div v-show="loginType" class="left">
               <el-form>
                 <el-form-item>
-                  <el-input :prefix-icon="User" placeholder="请输入手机号码"></el-input>
+                  <el-input v-model="loginParams.phone" :prefix-icon="User" placeholder="请输入手机号码"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-input :prefix-icon="Lock" placeholder="请输入手机验证码"></el-input>
+                  <el-input v-model="loginParams.code" :prefix-icon="Lock" placeholder="请输入手机验证码"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button>获取验证码</el-button>
+                  <el-button @click="getCode" :disabled="!isPhone">获取验证码</el-button>
                 </el-form-item>
                 <el-button type="primary" size="default" style="width: 100%">用户登录</el-button>
                 <div class="bottom" @click="changeScene">

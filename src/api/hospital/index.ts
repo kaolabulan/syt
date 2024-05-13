@@ -5,5 +5,8 @@ export const reqHospitalRegister = (hoscode:string)=>request.get<any,HospitalDet
 //获取医院科室信息
 export const reqDepartmentInfo = (hoscode:string)=>request.get<any,Department>(`/hosp/hospital/department/${hoscode}`)
 
+//获取验证码/api/sms/send/{phone}
+export const reqSendPhone = (phone:string)=>request.get(`/sms/send/${phone}`)
+
 
 
