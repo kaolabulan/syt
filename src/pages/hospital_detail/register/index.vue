@@ -1,7 +1,46 @@
 <script setup lang="ts">
   import {useHospitalDetailStore} from "@/store/hospitalDetailStore.ts";
+  import {onMounted, onUnmounted, ref} from "vue";
   const detailStore = useHospitalDetailStore()
 
+  //高亮
+  const isActive = ref<number>(0)
+  const indexClick = (index:number)=>{
+    isActive.value = index
+    //点击导航 获取H1标题
+    //获取所有.cur
+    const curAll = document.querySelectorAll(".cur")
+    //点击后滚动到对应位置
+    curAll[isActive.value].scrollIntoView({
+      behavior:"smooth"
+    })
+  }
+
+  // const department= <HTMLElement>document.querySelector('.department')
+  // const onScroll=()=> {
+  //   // 获取所有锚点元素
+  //   const navContents = document.querySelectorAll('.cur') as NodeListOf<HTMLElement>
+  //   // 所有锚点元素的 offsetTop
+  //   const offsetTopArr:any = []
+  //   navContents.forEach(item => {
+  //     offsetTopArr.push(item.offsetTop)
+  //   })
+  //   // 获取当前文档流的 scrollTop
+  //   const scrollTop = department.scrollTop
+  //   // 定义当前点亮的导航下标
+  //   let navIndex = 0
+  //   for (let n = 0; n < offsetTopArr.length; n++) {
+  //     // 如果 scrollTop 大于等于第 n 个元素的 offsetTop 则说明 n-1 的内容已经完全不可见
+  //     // 那么此时导航索引就应该是 n 了
+  //     if (scrollTop >= offsetTopArr[n]) {
+  //       navIndex = n
+  //     }
+  //   }
+  //   // 把下标赋值给 vue 的 data
+  //   isActive.value = navIndex
+  // }
+  // onMounted(()=> department.addEventListener('scroll',onScroll))
+  // onUnmounted(()=>department.removeEventListener('scroll',onScroll))
 </script>
 
 <template>
@@ -36,9 +75,37 @@
           }}前取消
         </div>
         <div class="rule">预约挂号规则</div>
+        <div
+            class="ruleInfo"
+            v-for="(item, index) in detailStore.hospitalInfo.bookingRule?.rule"
+            :key="index"
+        >
+          {{ item }}
+        </div>
+      </div>
+    </div>
+    <!-- 放置每一个医院的科室的数据 -->
+    <div class="department">
+      <div class="leftNev">
+        <ul>
+          <li @click="indexClick(index)" :class="{active:index===isActive}" v-for="(item,index) in detailStore.departmentInfo" :key="item.depcode">
+            {{item.depname}}
+          </li>
+        </ul>
+      </div>
+      <div class="departmentInfo">
+        <div class="showDepartment" v-for="department in detailStore.departmentInfo" :key="department.depcode">
+          <h1 class="cur">{{department.depname}}</h1>
+          <ul>
+            <li v-for="item in department.children" :key="item.depcode">
+              {{item.depname}}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <style scoped lang="scss">
@@ -84,6 +151,60 @@
       .ruleInfo {
         margin-top: 10px;
         color: #7f7f7f;
+      }
+    }
+  }
+
+  .department{
+    width: 100%;
+    height: 500px;
+    display: flex;
+    margin-top: 20px;
+    .leftNev{
+      width: 100px;
+      ul{
+        width: 100%;
+        height: 100%;
+        background-color: rgb(248,248,248);
+        display: flex;
+        flex-direction: column;
+        li{
+          flex: 1;
+          text-align: center;
+          line-height: 40px;
+          font-size: 16px;
+          &.active{
+            border-left: 2px solid red;
+            font-weight: 888;
+            background-color: skyblue;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+    .departmentInfo{
+      flex: 1;
+      margin-left: 20px;
+      height: 100%;
+      overflow: auto;
+      .showDepartment{
+        h1{
+          background-color: rgb(248,248,248);
+          color: #7f7f7f;
+          font-size: 20px;
+          line-height: 40px;
+          font-weight: 888;
+        }
+        ul{
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          li{
+            color: #7f7f7f;
+            width: 30%;
+            margin: 10px 0;
+          }
+        }
       }
     }
   }

@@ -45,6 +45,17 @@ export interface HospitalDetail extends ResponseData{
 }
 
 
+//医院科室TS类型
+export interface DepartmentDataItem {
+  "depcode": string,
+  "depname": string,
+  "children"?: DepartmentDataItem[]
+}
+export type DepartmentData = DepartmentDataItem[]
+export interface Department extends ResponseData{
+  data:DepartmentData,
+}
+
 
 
 

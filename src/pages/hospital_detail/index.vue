@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {Document, Menu as IconMenu, Warning, Setting,Search,HomeFilled} from '@element-plus/icons-vue'
 import {useRouter,useRoute} from "vue-router";
-import {onMounted} from "vue";
+import {onMounted, } from "vue";
 import {useHospitalDetailStore} from "@/store/hospitalDetailStore.ts";
+
 
 const router = useRouter()
 const route = useRoute()
@@ -12,10 +13,13 @@ const changeActive = (path:string)=>{
 }
 
 onMounted(()=>detailStore.getHospitalRegister(<string>route.query.hoscode))
+
+//获取医院科室信息
+onMounted(()=>detailStore.getDepartmentInfo(<string>route.query.hoscode))
 </script>
 
 <template>
-  <div class="detail">
+  <div class="hos_detail">
     <!-- 左侧导航区-->
     <div class="menu">
       <div class="top">
@@ -61,7 +65,7 @@ onMounted(()=>detailStore.getHospitalRegister(<string>route.query.hoscode))
 </template>
 
 <style scoped lang="scss">
-.detail {
+.hos_detail {
   display: flex;
 
   .menu {

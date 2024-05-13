@@ -86,7 +86,7 @@ const detailStore = useHospitalDetailStore()
   }
   .logo {
     display: flex;
-    margin: 10px 0px;
+    margin: 10px 0;
     .left {
       img {
         width: 80px;
@@ -98,7 +98,7 @@ const detailStore = useHospitalDetailStore()
       color: #7f7f7f;
       margin-left: 10px;
       div {
-        margin: 10px 0px;
+        margin: 10px 0;
       }
     }
   }
