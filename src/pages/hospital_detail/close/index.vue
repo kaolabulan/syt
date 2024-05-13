@@ -1,11 +1,24 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div>停诊</div>
+  <div>
+    <div class="info">
+      <h1>{{ detailStore.hospitalInfo.hospital?.hosname }}听诊信息</h1>
+      <el-empty description="暂无信息" />
+    </div>
+  </div>
 </template>
 
-<style scoped lang="scss">
+<script setup lang="ts">
+//引入医院详情仓库的数据
+import {useHospitalDetailStore} from "@/store/hospitalDetailStore.ts";
 
+let detailStore = useHospitalDetailStore();
+</script>
+
+<style scoped lang="scss">
+.info {
+  h1 {
+    text-align: center;
+    font-size: 30px;
+  }
+}
 </style>
