@@ -16,7 +16,6 @@ export const useHospitalDetailStore = defineStore('hospitalDetailStore',()=>{
   const departmentInfo = ref<DepartmentData>([] as DepartmentData)
   const getDepartmentInfo =async (hoscode:string)=>{
     const res:Department = await reqDepartmentInfo(hoscode)
-    console.log(res)
     if (res.code===200){
       departmentInfo.value = res.data
     }

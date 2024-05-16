@@ -57,5 +57,18 @@ export interface Department extends ResponseData{
 }
 
 
+//用户登录接口需要携带参数类型
+export interface LoginData {
+  phone: string,
+  code: string
+}
+//登录接口返回的数据的ts类型
+export interface UserInfo{
+  name:string,
+  token:string
+}
+export interface UserInfoData extends ResponseData{
+  data:UserInfo
+}
 
 

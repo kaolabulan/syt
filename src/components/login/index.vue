@@ -5,6 +5,7 @@
   import {reactive, ref, computed,} from "vue";
   import {reqSendPhone} from "@/api/hospital";
   import CountDown from "@/components/countdown/index.vue"
+  import { ElMessage } from "element-plus";
 
   const userStore = useUserStore()
 
@@ -41,6 +42,19 @@
   const flagChange = (value:boolean)=>{
     flag.value = value
   }
+
+  //发送登录请求
+  const getUserInfo =async ()=>{
+    try {
+      await userStore.getUserLogin(loginParams)
+      userStore.dialogVisible=false
+    }catch (error) {
+      ElMessage({
+        type: "error",
+        message: (error as Error).message,
+      });
+    }
+  }
 </script>
 <script lang="ts">
 export default {
@@ -68,7 +82,7 @@ export default {
                     <CountDown v-else :flag="flag" @flagChange="flagChange"/>
                   </el-button>
                 </el-form-item>
-                <el-button type="primary" size="default" style="width: 100%">用户登录</el-button>
+                <el-button @click="getUserInfo" :disabled="!isPhone||loginParams.code?.length!==6" type="primary" size="default" style="width: 100%">用户登录</el-button>
                 <div class="bottom" @click="changeScene">
 
                     <p>微信扫码登录</p>

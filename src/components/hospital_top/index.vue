@@ -12,6 +12,10 @@ const goHome = ()=>{
 const login = ()=>{
   userStore.dialogVisible = true
 }
+
+const goUser=()=>{
+
+}
 </script>
 
 <template>
@@ -23,8 +27,29 @@ const login = ()=>{
       </div>
       <div class="right">
         <p class="help">帮助中心</p>
-        <p class="login" @click="login">登录/注册</p>
+        <p class="login" @click="login" v-if="!userStore.userInfo.token">登录/注册</p>
+        <el-dropdown v-else>
+          <span class="el-dropdown-link">
+            {{ userStore.userInfo.name }}
+            <el-icon class="el-icon--right">
+              <arrow-down />
+            </el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="goUser('/user/certification')"
+              >实名认证</el-dropdown-item
+              >
+              <el-dropdown-item @click="goUser('/user/order')">挂号订单</el-dropdown-item>
+              <el-dropdown-item @click="goUser('/user/patient')"
+              >就诊人管理</el-dropdown-item
+              >
+              <el-dropdown-item >退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
+
     </div>
   </div>
 </template>
