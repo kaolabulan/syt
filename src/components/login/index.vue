@@ -2,9 +2,9 @@
   import {useUserStore} from "@/store/userStore.ts";
   //引入图标
   import { User, Lock } from "@element-plus/icons-vue";
-  import {reactive, ref, computed, onMounted} from "vue";
+  import {reactive, ref, computed,} from "vue";
   import {reqSendPhone} from "@/api/hospital";
-  import {get} from "axios";
+  import CountDown from "@/components/countdown/index.vue"
 
   const userStore = useUserStore()
 
@@ -33,6 +33,13 @@
     if (res.code===200){
       loginParams.code=res.data
     }
+    flag.value = false
+  }
+
+  //验证码倒计时控制
+  const flag = ref<boolean>(true)
+  const flagChange = (value:boolean)=>{
+    flag.value = value
   }
 </script>
 <script lang="ts">
@@ -56,7 +63,10 @@ export default {
                   <el-input v-model="loginParams.code" :prefix-icon="Lock" placeholder="请输入手机验证码"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button @click="getCode" :disabled="!isPhone">获取验证码</el-button>
+                  <el-button @click="getCode" :disabled="!isPhone||!flag">
+                    <span v-if="flag">获取验证码</span>
+                    <CountDown v-else :flag="flag" @flagChange="flagChange"/>
+                  </el-button>
                 </el-form-item>
                 <el-button type="primary" size="default" style="width: 100%">用户登录</el-button>
                 <div class="bottom" @click="changeScene">

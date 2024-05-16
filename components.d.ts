@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Countdown: typeof import('./src/components/countdown/index.vue')['default']
     ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
