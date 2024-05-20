@@ -12,10 +12,13 @@ const goHome = ()=>{
 const login = ()=>{
   userStore.dialogVisible = true
 }
-
-const goUser=()=>{
-
+//退出登录
+const logout = ()=>{
+  userStore.logout()
+  //路由跳转至首页
+  goHome()
 }
+
 </script>
 
 <template>
@@ -37,14 +40,10 @@ const goUser=()=>{
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="goUser('/user/certification')"
-              >实名认证</el-dropdown-item
-              >
-              <el-dropdown-item @click="goUser('/user/order')">挂号订单</el-dropdown-item>
-              <el-dropdown-item @click="goUser('/user/patient')"
-              >就诊人管理</el-dropdown-item
-              >
-              <el-dropdown-item >退出登录</el-dropdown-item>
+              <el-dropdown-item>实名认证</el-dropdown-item>
+              <el-dropdown-item >挂号订单</el-dropdown-item>
+              <el-dropdown-item>就诊人管理</el-dropdown-item>
+              <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
