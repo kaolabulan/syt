@@ -45,6 +45,7 @@
 
   //发送登录请求
   const getUserInfo =async ()=>{
+    await formRef.value.validate()
     try {
       await userStore.getUserLogin(loginParams)
       userStore.dialogVisible=false
@@ -83,7 +84,15 @@
 
   }
 
-
+//关闭登录窗口清空数据
+  const close = ()=>{
+    Object.assign(loginParams,{phone:'',code:''})
+    formRef.value.resetFields()
+  }
+  const closeDialog = ()=>{
+    userStore.dialogVisible=false
+    close()
+  }
 </script>
 <script lang="ts">
 export default {
@@ -92,7 +101,7 @@ export default {
 </script>
 <template>
   <div class="login_content">
-    <el-dialog v-model="userStore.dialogVisible" title="用户登录">
+    <el-dialog v-model="userStore.dialogVisible" title="用户登录" @close="close">
       <div class="content">
         <!-- 对话框身体部分 -->
         <el-row>
@@ -163,7 +172,7 @@ export default {
         </el-row>
       </div>
       <template #footer>
-        <el-button type="primary" size="default">关闭窗口</el-button>
+        <el-button type="primary" size="default" @click="closeDialog">关闭窗口</el-button>
       </template>
     </el-dialog>
   </div>
