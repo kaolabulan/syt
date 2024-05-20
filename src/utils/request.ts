@@ -1,4 +1,5 @@
 import axios from "axios";
+import {useUserStore} from "@/store/userStore.ts";
 
 const request = axios.create({
   baseURL:'/api',
@@ -7,7 +8,11 @@ const request = axios.create({
 
 //请求拦截器
 request.interceptors.request.use((config)=>{
-
+  //携带登录token
+  const userStore = useUserStore()
+  if (userStore.userInfo.token){
+    config.headers.token = userStore.userInfo.token
+  }
   return config
 });
 

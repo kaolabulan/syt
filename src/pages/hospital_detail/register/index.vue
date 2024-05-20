@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import {useHospitalDetailStore} from "@/store/hospitalDetailStore.ts";
   import { ref} from "vue";
-  import {useUserStore} from "@/store/userStore.ts";
+  import {useRouter,useRoute} from "vue-router";
   // import {onMounted, onUnmounted,} from 'vue'
   const detailStore = useHospitalDetailStore()
-  const userStore = useUserStore()
+  const router = useRouter()
+  const route = useRoute()
 
   //高亮
   const isActive = ref<number>(0)
@@ -45,9 +46,13 @@
   // onMounted(()=> department.addEventListener('scroll',onScroll))
   // onUnmounted(()=>department.removeEventListener('scroll',onScroll))
 
-  const showLogin = ()=>{
-    userStore.dialogVisible = true
+  const showLogin = (item:any)=>{
+    //判断登录
+    //路由跳转step1
+    const depcode=item.depcode
+    router.push({path:'/hospital/step1',query:{hoscode:route.query.hoscode,depcode}})
   }
+
 </script>
 
 <template>
@@ -104,7 +109,7 @@
         <div class="showDepartment" v-for="department in detailStore.departmentInfo" :key="department.depcode">
           <h1 class="cur">{{department.depname}}</h1>
           <ul>
-            <li @click="showLogin" v-for="item in department.children" :key="item.depcode">
+            <li @click="showLogin(item)" v-for="item in department.children" :key="item.depcode">
               {{item.depname}}
             </li>
           </ul>
