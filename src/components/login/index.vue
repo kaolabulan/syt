@@ -55,6 +55,35 @@
       });
     }
   }
+  //获取form组件实例
+  const formRef = ref()
+  //自定义校验规则
+  const validatorPhone = (rule: any, value: any, callBack: any) => {
+    //rule:即为表单校验规则对象
+    //value:即为当前文本的内容
+    //callBack:回调函数
+    const reg = /^1((34[0-8])|(8\d{2})|(([35][0-35-9]|4[579]|66|7[35678]|9[1389])\d{1}))\d{7}$/;
+    if (reg.test(value)) {
+      callBack();
+    } else {
+      callBack(new Error("请输入正确的手机号码格式"));
+    }
+  }
+  const validatorCode = (rule: any, value: any, callBack: any)=>{
+    if (/^\d{6}$/.test(value)) {
+      callBack()
+  } else {
+    callBack(new Error("请输入正确的验证码格式"))
+  }
+  }
+  //表单校验规则
+  const rules = {
+    phone:[{trigger:'change',validator:validatorPhone}],
+    code:[{trigger:'change',validator:validatorCode}],
+
+  }
+
+
 </script>
 <script lang="ts">
 export default {
@@ -69,11 +98,11 @@ export default {
         <el-row>
           <el-col :span="12">
             <div v-show="loginType" class="left">
-              <el-form>
-                <el-form-item>
+              <el-form :rules="rules" ref="formRef" :model="loginParams">
+                <el-form-item prop="phone">
                   <el-input v-model="loginParams.phone" :prefix-icon="User" placeholder="请输入手机号码"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="code">
                   <el-input v-model="loginParams.code" :prefix-icon="Lock" placeholder="请输入手机验证码"></el-input>
                 </el-form-item>
                 <el-form-item>
