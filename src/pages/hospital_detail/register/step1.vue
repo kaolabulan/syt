@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import {reqHospitalWork} from "@/api/hospital";
-  import {onMounted, ref} from "vue";
+  import {reqHospitalWork,reqDoctorWork} from "@/api/hospital";
+  import {computed, onMounted, ref} from "vue";
   import {useRoute} from "vue-router";
-  import {HospitalWork, HospitalWorkData} from "@/api/hospital/type.ts";
+  import {DoctorWorkData, HospitalWork, HospitalWorkData} from "@/api/hospital/type.ts";
   const route = useRoute()
 
 
@@ -13,8 +13,29 @@
   const getHospitalWork =async ()=>{
     const res:HospitalWork =await reqHospitalWork(page.value,limit.value,route.query.hoscode as string,route.query.depcode as string)
     workData.value = res.data
+    workday.value = workData.value.bookingScheduleList[0].workDate
+    await getDoctorWork()
   }
   onMounted(()=>getHospitalWork())
+  //点击获取值班日期 发送请求
+  const workday = ref('')
+  const status = ref(-1)
+  const workdayClick = (item:any)=>{
+    workday.value = item.workDate
+    status.value = item.status
+    console.log(morningArr.value,afternoonArr.value)
+    getDoctorWork()
+
+  }
+  //医师排班数据
+  const doctorData = ref<DoctorWorkData>([] as DoctorWorkData)
+  const getDoctorWork =async ()=>{
+    const res = await reqDoctorWork(route.query.hoscode as string,route.query.depcode as string,workday.value)
+    doctorData.value = res.data
+  }
+  //计算 上下午排版数据
+  const morningArr = computed(()=>doctorData.value.filter((item)=>item.workTime===0))
+  const afternoonArr = computed(()=>doctorData.value.filter((item)=>item.workTime===1))
 </script>
 
 <template>
@@ -31,10 +52,11 @@
     <div class="center">
       <h1 class="time">{{ workData.baseMap?.workDateString }}</h1>
       <div class="container">
-        <div :class="{active: item.status == -1 || item.availableNumber == -1 }"
+        <div :class="{active: item.status == -1 || item.availableNumber == -1,cur:item.workDate===workday}"
              class="item"
              v-for="(item,index) in workData.bookingScheduleList"
-             :key="index">
+             :key="index"
+             @click="workdayClick(item)">
           <div class="top1">{{ item.workDate }}-{{item.dayOfWeek}}</div>
           <div class="bottom">
             <div v-if="item.status===-1">无号</div>
@@ -50,13 +72,17 @@
     </div>
     <!-- 底部展示医生的结构 -->
     <div class="bottom">
+      <!-- 无号或满号 -->
+      <div class="will" v-if="status===-1||(status===0&&doctorData.length<1)">
+        <span class="time">该时间段医生休息或挂号约满</span>
+      </div>
       <!-- 展示即将放号的时间 -->
-      <div class="will">
+      <div class="will" v-else-if="status===1">
         <span class="time">2023年6月3日08:30</span>
         <span class="willText">放号</span>
       </div>
       <!-- 展示医生的结构:上午、下午 -->
-      <div class="doctor">
+      <div class="doctor" v-else-if="status===0">
         <!-- 上午 -->
         <div class="moring">
           <!-- 顶部文字提示 -->
@@ -80,22 +106,20 @@
             <span class="text">上午号源</span>
           </div>
           <!--每一个医生的信息-->
-          <div class="doc_info">
+          <div class="doc_info" v-for="doc in morningArr" :key="doc.hosScheduleId">
             <!-- 展示医生的名字|技能 -->
             <div class="left">
               <div class="info">
-                <span>副主任医师</span>
+                <span>{{ doc.title }}</span>
                 <span>|</span>
-                <span>考拉</span>
+                <span>{{ doc.docname }}</span>
               </div>
-              <div class="skill">骨质疏松、跌打损伤</div>
+              <div class="skill">{{ doc.skill }}</div>
             </div>
             <!-- 右侧区域展示挂号的钱数-->
             <div class="right">
-              <div class="money">￥100</div>
-              <el-button type="primary" size="default">{{
-                  100
-                }}</el-button>
+              <div class="money">￥{{doc.amount}}</div>
+              <el-button type="primary" size="default">{{doc.availableNumber}}</el-button>
             </div>
           </div>
         </div>
@@ -162,24 +186,23 @@
             <span class="text">下午号源</span>
           </div>
           <!--每一个医生的信息-->
-          <div class="doc_info">
+          <div class="doc_info" v-for="doc in afternoonArr" :key="doc.hosScheduleId">
             <!-- 展示医生的名字|技能 -->
             <div class="left">
               <div class="info">
-                <span>副主任医师</span>
+                <span>{{ doc.title }}</span>
                 <span>|</span>
-                <span>考拉</span>
+                <span>{{ doc.docname }}</span>
               </div>
-              <div class="skill">骨质疏松、跌打损伤</div>
+              <div class="skill">{{ doc.skill }}</div>
             </div>
             <!-- 右侧区域展示挂号的钱数-->
             <div class="right">
-              <div class="money">￥100</div>
-              <el-button type="primary" size="default">{{
-                  100
-                }}</el-button>
+              <div class="money">￥{{doc.amount}}</div>
+              <el-button type="primary" size="default">{{doc.availableNumber}}</el-button>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -245,6 +268,9 @@
           text-align: center;
           line-height: 60px;
         }
+      }
+      .item:hover{
+        cursor: pointer;
       }
     }
   }

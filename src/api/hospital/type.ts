@@ -100,3 +100,38 @@ export interface HospitalWorkData{
 export interface HospitalWork extends ResponseData{
   "data":HospitalWorkData
 }
+
+//医师排班数据TS类型
+export interface DoctorWorkItem{
+  "id": string,
+  "createTime": string,
+  "updateTime": string,
+  "isDeleted": number,
+  "param": {
+    "dayOfWeek": string,
+    "depname": string,
+    "hosname": string
+  },
+  "hoscode": string,
+  "depcode": string,
+  "title": string,
+  "docname": string,
+  "skill": string,
+  "workDate": string,
+  "workTime": number,
+  "reservedNumber": number,
+  "availableNumber": number,
+  "amount": number,
+  "status": number,
+  "hosScheduleId": string
+}
+export type DoctorWorkData = DoctorWorkItem[]
+export interface DoctorWork extends ResponseData{
+  "data":DoctorWorkData
+}
+
+
+
+
+
+
