@@ -86,12 +86,13 @@ const isClick = computed(()=>props.visitorItem.id===props.clickId)
       opacity: 0.5;
       transform: rotate(35deg);
     }
+
     .confirm-enter-from {
       transform: scale(1);
     }
 
     .confirm-enter-active {
-      transition: all 0.3s;
+      transition: all 0.3s linear;
     }
 
     .confirm-enter-to {

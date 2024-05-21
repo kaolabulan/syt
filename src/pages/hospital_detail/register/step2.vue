@@ -27,6 +27,7 @@ const clickId = ref()
 const activeClick = (people:any)=>{
   clickId.value = people.id
 }
+
 </script>
 
 <template>
@@ -115,7 +116,7 @@ const activeClick = (people:any)=>{
     </el-card>
     <!--提交按钮    -->
     <div class="btn">
-      <el-button type="primary" size="default">确认挂号</el-button>
+      <el-button type="primary" size="default" :disabled="clickId===undefined">确认挂号</el-button>
 
     </div>
   </div>
