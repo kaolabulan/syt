@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import {User} from "@element-plus/icons-vue";
 import Visitor from "@/pages/hospital_detail/register/visitor.vue";
+import {reqVisitor} from "@/api/hospital";
+import {onMounted, ref} from "vue";
+import {VisitorData} from "@/api/hospital/type.ts";
 
+const visitorInfo = ref<VisitorData>({} as VisitorData)
+const getVisitor =async ()=>{
+  const res =await reqVisitor()
+  visitorInfo.value = res.data
+}
+onMounted(()=>getVisitor())
 </script>
 
 <template>
@@ -16,7 +25,7 @@ import Visitor from "@/pages/hospital_detail/register/visitor.vue";
         </div>
       </template>
       <div class="user">
-        <Visitor v-for="o in 4" :key="o" class="item"></Visitor>
+        <Visitor :visitorItem="p"  v-for="p in visitorInfo" :key="p.id" class="item"></Visitor>
       </div>
     </el-card>
     <!--展示医生信息的卡片  -->
@@ -27,11 +36,7 @@ import Visitor from "@/pages/hospital_detail/register/visitor.vue";
         </div>
       </template>
 
-      <el-descriptions
-          class="margin-top"
-          :column="3"
-          border
-      >
+      <el-descriptions class="margin-top" :column="3" border>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">
@@ -89,11 +94,14 @@ import Visitor from "@/pages/hospital_detail/register/visitor.vue";
           *****
         </el-descriptions-item>
 
-
-
       </el-descriptions>
 
     </el-card>
+    <!--提交按钮    -->
+    <div class="btn">
+      <el-button type="primary" size="default">确认挂号</el-button>
+
+    </div>
   </div>
 
 </template>
@@ -118,15 +126,19 @@ import Visitor from "@/pages/hospital_detail/register/visitor.vue";
 
     .user {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
       flex-wrap: wrap;
 
       .item {
         width: 30%;
-        margin: 15px 0;
+        margin: 15px 10px;
       }
     }
+  }
+
+  .btn{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
   }
 }
 </style>

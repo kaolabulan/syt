@@ -2,8 +2,8 @@
   <div class="visitor">
     <div class="top">
       <div class="left">
-        <span class="free">医保</span>
-        <span class="username">考拉</span>
+        <span class="free">{{ visitorItem.isInsure===1?'医保':'自费' }}</span>
+        <span class="username">{{ visitorItem.name }}</span>
       </div>
       <div class="right">
 
@@ -17,14 +17,14 @@
       </div>
     </div>
     <div class="bottom">
-      <p>证件类型:</p>
-      <p>证件号码:</p>
-      <p>用户性别:</p>
-      <p>出生日期：</p>
-      <p>手机号码：</p>
-      <p>婚姻状况:</p>
-      <p>当前住址</p>
-      <p>详细地址：</p>
+      <p>证件类型: {{visitorItem.param.certificatesTypeString}}</p>
+      <p>证件号码: {{visitorItem.certificatesNo}}</p>
+      <p>用户性别: {{visitorItem.sex===1?'男':'女'}}</p>
+      <p>出生日期：{{visitorItem.birthdate}}</p>
+      <p>手机号码：{{visitorItem.phone}}</p>
+      <p>婚姻状况: {{visitorItem.isMarry===1?'已婚':'未婚'}}</p>
+      <p>当前住址: {{visitorItem.param.cityString}}</p>
+      <p>详细地址：{{visitorItem.param.fullAddress}}</p>
       <!-- 红色的已经选择的盒子 -->
 <!--      <transition name="confirm">-->
 <!--        <div class="confirm" v-if="index === currentIndex">已选择</div>-->
@@ -34,8 +34,8 @@
 </template>
 
 <script setup lang="ts">
-
 import {EditPen, User} from "@element-plus/icons-vue";
+const props = defineProps(['visitorItem'])
 
 </script>
 
