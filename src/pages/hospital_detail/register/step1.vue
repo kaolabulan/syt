@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import {reqHospitalWork,reqDoctorWork} from "@/api/hospital";
   import {computed, onMounted, ref} from "vue";
-  import {useRoute} from "vue-router";
+  import {useRoute,useRouter} from "vue-router";
   import {DoctorWorkData, HospitalWork, HospitalWorkData} from "@/api/hospital/type.ts";
   const route = useRoute()
+  const router = useRouter()
 
 
   //page:number,limit:number,hoscode:string,depcode:string
@@ -36,6 +37,10 @@
   //计算 上下午排版数据
   const morningArr = computed(()=>doctorData.value.filter((item)=>item.workTime===0))
   const afternoonArr = computed(()=>doctorData.value.filter((item)=>item.workTime===1))
+  //路由跳转 就诊人选择
+  const goStep2 = (doc:any)=>{
+    router.push({path:'/hospital/step2',query:{docId:doc.id}})
+  }
 </script>
 
 <template>
@@ -106,7 +111,7 @@
             <span class="text">上午号源</span>
           </div>
           <!--每一个医生的信息-->
-          <div class="doc_info" v-for="doc in morningArr" :key="doc.hosScheduleId">
+          <div class="doc_info" v-for="doc in morningArr" :key="doc.id">
             <!-- 展示医生的名字|技能 -->
             <div class="left">
               <div class="info">
@@ -119,7 +124,7 @@
             <!-- 右侧区域展示挂号的钱数-->
             <div class="right">
               <div class="money">￥{{doc.amount}}</div>
-              <el-button type="primary" size="default">{{doc.availableNumber}}</el-button>
+              <el-button @click="goStep2(doc)" type="primary" size="default">剩余{{doc.availableNumber}}</el-button>
             </div>
           </div>
         </div>
@@ -186,7 +191,7 @@
             <span class="text">下午号源</span>
           </div>
           <!--每一个医生的信息-->
-          <div class="doc_info" v-for="doc in afternoonArr" :key="doc.hosScheduleId">
+          <div class="doc_info" v-for="doc in afternoonArr" :key="doc.id">
             <!-- 展示医生的名字|技能 -->
             <div class="left">
               <div class="info">
@@ -199,7 +204,7 @@
             <!-- 右侧区域展示挂号的钱数-->
             <div class="right">
               <div class="money">￥{{doc.amount}}</div>
-              <el-button type="primary" size="default">{{doc.availableNumber}}</el-button>
+              <el-button @click="goStep2(doc)" type="primary" size="default">剩余{{doc.availableNumber}}</el-button>
             </div>
           </div>
 
