@@ -1,16 +1,32 @@
 <script setup lang="ts">
 import {User} from "@element-plus/icons-vue";
 import Visitor from "@/pages/hospital_detail/register/visitor.vue";
-import {reqVisitor} from "@/api/hospital";
+import {reqDoctorIdInfo, reqVisitor} from "@/api/hospital";
 import {onMounted, ref} from "vue";
-import {VisitorData} from "@/api/hospital/type.ts";
+import {IdInfoData, VisitorData} from "@/api/hospital/type.ts";
+import {useRoute} from "vue-router";
+const route = useRoute()
 
+//就诊人数据
 const visitorInfo = ref<VisitorData>({} as VisitorData)
 const getVisitor =async ()=>{
   const res =await reqVisitor()
   visitorInfo.value = res.data
 }
 onMounted(()=>getVisitor())
+//挂号医师数据
+const doctorInfo = ref<IdInfoData>({} as IdInfoData)
+const getDoctorWorking =async ()=>{
+  const res = await reqDoctorIdInfo(route.query.docId as string)
+  doctorInfo.value = res.data
+}
+onMounted(()=>getDoctorWorking())
+
+//点击存储标志
+const clickId = ref()
+const activeClick = (people:any)=>{
+  clickId.value = people.id
+}
 </script>
 
 <template>
@@ -25,7 +41,7 @@ onMounted(()=>getVisitor())
         </div>
       </template>
       <div class="user">
-        <Visitor :visitorItem="p"  v-for="p in visitorInfo" :key="p.id" class="item"></Visitor>
+        <Visitor :clickId="clickId"  @click="activeClick(p)" :visitorItem="p"  v-for="p in visitorInfo" :key="p.id" class="item"></Visitor>
       </div>
     </el-card>
     <!--展示医生信息的卡片  -->
@@ -43,7 +59,7 @@ onMounted(()=>getVisitor())
               就诊日期：
             </div>
           </template>
-          *****
+          {{doctorInfo.workDate}}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -51,7 +67,7 @@ onMounted(()=>getVisitor())
               就诊医院：
             </div>
           </template>
-          *****
+          {{ doctorInfo.param?.hosname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -59,7 +75,7 @@ onMounted(()=>getVisitor())
               就诊科室：
             </div>
           </template>
-          *****
+          {{ doctorInfo.param?.depname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -67,7 +83,7 @@ onMounted(()=>getVisitor())
               医生姓名：
             </div>
           </template>
-          *****
+          {{ doctorInfo.docname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -75,7 +91,7 @@ onMounted(()=>getVisitor())
               医生职务：
             </div>
           </template>
-          *****
+          {{ doctorInfo.title }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -83,7 +99,7 @@ onMounted(()=>getVisitor())
               医生专长：
             </div>
           </template>
-          *****
+          {{ doctorInfo.skill }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -91,7 +107,7 @@ onMounted(()=>getVisitor())
               费用：
             </div>
           </template>
-          *****
+          {{ doctorInfo.amount}}
         </el-descriptions-item>
 
       </el-descriptions>

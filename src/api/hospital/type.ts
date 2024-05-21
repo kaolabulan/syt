@@ -173,6 +173,33 @@ export interface UserResponseData extends ResponseData {
   data: VisitorData
 }
 
+//排班挂号医生ID数据TS类型
+export interface IdInfoData {
+  "id": string,
+  "createTime": string,
+  "updateTime": string,
+  "isDeleted": number,
+  "param": {
+    "dayOfWeek": string,
+    "depname": string,
+    "hosname": string
+  },
+  "hoscode": string,
+  "depcode": string,
+  "title": string,
+  "docname": string,
+  "skill": string,
+  "workDate": string,
+  "workTime": number,
+  "reservedNumber": number,
+  "availableNumber": number,
+  "amount": number,
+  "status": number,
+  "hosScheduleId": string
+}
+export interface IdInfo extends ResponseData{
+  data:IdInfoData
+}
 
 
 

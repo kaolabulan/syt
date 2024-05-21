@@ -25,17 +25,20 @@
       <p>婚姻状况: {{visitorItem.isMarry===1?'已婚':'未婚'}}</p>
       <p>当前住址: {{visitorItem.param.cityString}}</p>
       <p>详细地址：{{visitorItem.param.fullAddress}}</p>
+      <p>{{visitorItem.id}}--{{clickId}}--{{isClick}}</p>
       <!-- 红色的已经选择的盒子 -->
-<!--      <transition name="confirm">-->
-<!--        <div class="confirm" v-if="index === currentIndex">已选择</div>-->
-<!--      </transition>-->
+      <transition name="confirm">
+        <div class="confirm" v-if="isClick">已选择</div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {EditPen, User} from "@element-plus/icons-vue";
-const props = defineProps(['visitorItem'])
+import {computed} from "vue";
+const props = defineProps(['visitorItem','clickId'])
+const isClick = computed(()=>props.visitorItem.id===props.clickId)
 
 </script>
 
@@ -62,27 +65,27 @@ const props = defineProps(['visitorItem'])
     }
   }
   .bottom {
-    position: relative;
     padding: 20px;
+    position: relative;
     p {
       line-height: 40px;
     }
-    .confirm {
+    .confirm{
       position: absolute;
       width: 200px;
       height: 200px;
       color: red;
-      border-radius: 50%;
       border: 1px dashed red;
-      text-align: center;
+      border-radius: 50%;
+      font-size: 25px;
+      font-weight: 888;
       line-height: 200px;
-      left: 20%;
+      text-align: center;
       top: 20%;
+      left: 38px;
       opacity: 0.5;
       transform: rotate(35deg);
-      font-weight: 900;
     }
-
     .confirm-enter-from {
       transform: scale(1);
     }
@@ -94,6 +97,7 @@ const props = defineProps(['visitorItem'])
     .confirm-enter-to {
       transform: scale(1.2);
     }
+
   }
 }
 </style>
