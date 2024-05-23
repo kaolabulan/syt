@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {reqCancelOrder, reqOrderInfo} from "@/api/member";
+  import {reqCancelOrder, reqOrderInfo} from "@/api/member";
   import {onMounted, ref} from "vue";
   import {useRoute} from "vue-router";
   import { OrderInfoData} from "@/api/member/type.ts";
@@ -28,6 +28,12 @@ import {reqCancelOrder, reqOrderInfo} from "@/api/member";
     }
   }
 
+  //支付弹窗
+  const dialogTableVisible = ref(true)
+
+  const closeDialog = ()=>{
+    dialogTableVisible.value = false
+  }
 </script>
 
 <template>
@@ -118,7 +124,7 @@ import {reqCancelOrder, reqOrderInfo} from "@/api/member";
                   <el-button>取消预约</el-button>
                 </template>
               </el-popconfirm>
-              <el-button v-if="orderInfo.orderStatus===0" type="primary" size="default">支付</el-button>
+              <el-button @click="dialogTableVisible=true" v-if="orderInfo.orderStatus===0" type="primary" size="default">支付</el-button>
             </div>
           </div>
           <div class="left">
@@ -145,6 +151,17 @@ import {reqCancelOrder, reqOrderInfo} from "@/api/member";
         </div>
       </template>
     </el-card>
+
+    <el-dialog @close="closeDialog" v-model="dialogTableVisible" title="微信支付" width="400">
+      <div class="dialog-body">
+        <img src="@/assets/images/code_login_wechat.png" alt="">
+        <p>请使用微信扫一扫</p>
+        <p>扫描二维码支付</p>
+      </div>
+      <template #footer>
+        <el-button @click="closeDialog">关闭窗口</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -213,6 +230,25 @@ import {reqCancelOrder, reqOrderInfo} from "@/api/member";
     }
 
 
+  }
+
+  .dialog-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #7f7f7f;
+    border-top: 1px solid #7f7f7f;
+    height: 250px;
+
+    img{
+      width: 130px;
+      height: 130px;
+    }
+    p{
+      line-height: 30px;
+
+    }
   }
 }
 
