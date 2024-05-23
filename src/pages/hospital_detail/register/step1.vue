@@ -24,7 +24,6 @@
   const workdayClick = (item:any)=>{
     workday.value = item.workDate
     status.value = item.status
-    console.log(morningArr.value,afternoonArr.value)
     getDoctorWork()
 
   }

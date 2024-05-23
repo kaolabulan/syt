@@ -25,7 +25,6 @@
       <p>婚姻状况: {{visitorItem.isMarry===1?'已婚':'未婚'}}</p>
       <p>当前住址: {{visitorItem.param.cityString}}</p>
       <p>详细地址：{{visitorItem.param.fullAddress}}</p>
-      <p>{{visitorItem.id}}--{{clickId}}--{{isClick}}</p>
       <!-- 红色的已经选择的盒子 -->
       <transition name="confirm">
         <div class="confirm" v-if="isClick">已选择</div>

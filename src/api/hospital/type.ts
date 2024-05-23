@@ -1,5 +1,4 @@
 //定义详情模块数据TS类型
-import {reqVisitor} from "@/api/hospital/index.ts";
 
 export interface ResponseData{
   code:number,

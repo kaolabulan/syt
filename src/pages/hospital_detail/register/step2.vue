@@ -4,9 +4,13 @@ import Visitor from "@/pages/hospital_detail/register/visitor.vue";
 import {reqDoctorIdInfo, reqVisitor} from "@/api/hospital";
 import {onMounted, ref} from "vue";
 import {IdInfoData, VisitorData} from "@/api/hospital/type.ts";
-import {useRoute} from "vue-router";
-const route = useRoute()
+import {useRoute,useRouter} from "vue-router";
+import {reqOrderId} from "@/api/member";
+import {OrderData} from "@/api/member/type.ts";
+import {ElMessage} from "element-plus";
 
+const route = useRoute()
+const router = useRouter()
 //就诊人数据
 const visitorInfo = ref<VisitorData>({} as VisitorData)
 const getVisitor =async ()=>{
@@ -27,7 +31,21 @@ const clickId = ref()
 const activeClick = (people:any)=>{
   clickId.value = people.id
 }
+//确认挂号提交
+const goOrder =async ()=>{
+  //获取订单号
+  const res:OrderData = await reqOrderId(doctorInfo.value.hoscode,doctorInfo.value.id,clickId.value)
+  if (res.code===200){
+    //进行路由跳转
+    await router.push({path:'/member/order',query:{orderId:res.data}})
+  }else {
+    ElMessage({
+      type:"error",
+      message:res.message
+    })
+  }
 
+}
 </script>
 
 <template>
@@ -116,7 +134,7 @@ const activeClick = (people:any)=>{
     </el-card>
     <!--提交按钮    -->
     <div class="btn">
-      <el-button type="primary" size="default" :disabled="clickId===undefined">确认挂号</el-button>
+      <el-button @click="goOrder" type="primary" size="default" :disabled="clickId===undefined">确认挂号</el-button>
 
     </div>
   </div>
