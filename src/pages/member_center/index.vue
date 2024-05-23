@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {Document, Menu as IconMenu, Warning, Setting,Search,HomeFilled} from '@element-plus/icons-vue'
-
-
-const changeActive = ()=>{
-
+import {useRouter,useRoute} from "vue-router";
+const router = useRouter()
+const route = useRoute()
+const changeActive = (path:string)=>{
+  router.push(path)
 }
 </script>
 <script lang="ts">
@@ -19,30 +20,30 @@ const changeActive = ()=>{
         <el-icon><HomeFilled /></el-icon>
         <span>/ 会员中心</span>
       </div>
-      <el-menu  class="el-menu-vertical-demo">
-        <el-menu-item @click="changeActive('/hospital')" index="/hospital">
+      <el-menu :default-active=route.path  class="el-menu-vertical-demo">
+        <el-menu-item @click="changeActive('/member/certification')" index="/member/certification">
           <el-icon>
             <icon-menu/>
           </el-icon>
           <span>实名认证</span>
         </el-menu-item>
-        <el-menu-item @click="changeActive('/hospital/detail')" index="/hospital/detail">
+        <el-menu-item @click="changeActive('/member/order')" index="/member/order">
           <el-icon>
             <document/>
           </el-icon>
           <span>挂号订单</span>
         </el-menu-item>
-        <el-menu-item @click="changeActive('/hospital/notice')" index="/hospital/notice">
+        <el-menu-item @click="changeActive('/member/patient')" index="/member/patient">
           <el-icon><Warning /></el-icon>
           <span>就诊人管理</span>
         </el-menu-item>
-        <el-menu-item @click="changeActive('/hospital/close')" index="/hospital/close">
+        <el-menu-item @click="changeActive('/member/profile')" index="/member/profile">
           <el-icon>
             <setting/>
           </el-icon>
           <span>账号信息</span>
         </el-menu-item>
-        <el-menu-item @click="changeActive('/hospital/search')" index="/hospital/search">
+        <el-menu-item @click="changeActive('/member/feedback')" index="/member/feedback">
           <el-icon><Search /></el-icon>
           <span>意见反馈</span>
         </el-menu-item>

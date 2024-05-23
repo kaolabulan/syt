@@ -19,7 +19,10 @@ const logout = ()=>{
   //路由跳转至首页
   goHome()
 }
-
+//跳转会员中心
+const goMember=(path:string)=>{
+  router.push(path)
+}
 </script>
 
 <template>
@@ -41,9 +44,9 @@ const logout = ()=>{
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>实名认证</el-dropdown-item>
-              <el-dropdown-item >挂号订单</el-dropdown-item>
-              <el-dropdown-item>就诊人管理</el-dropdown-item>
+              <el-dropdown-item @click="goMember('/member/certification')">实名认证</el-dropdown-item>
+              <el-dropdown-item @click="goMember('/member/order')">挂号订单</el-dropdown-item>
+              <el-dropdown-item @click="goMember('/member/patient')">就诊人管理</el-dropdown-item>
               <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
