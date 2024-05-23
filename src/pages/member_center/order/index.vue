@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import {useRoute} from "vue-router";
+import DetailOrder from "@/pages/member_center/order/detail.vue";
+import AllOrder from "@/pages/member_center/order/all.vue";
 const route = useRoute()
 </script>
 
 <template>
   <div>
-    <div v-if="route.query.orderId">订单详情</div>
+    <div v-if="route.query.orderId">
+      <DetailOrder/>
+    </div>
 
-    <div v-else>全部订单</div>
+    <div v-else>
+      <AllOrder/>
+    </div>
   </div>
 </template>
 
