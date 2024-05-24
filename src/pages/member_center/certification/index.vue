@@ -15,31 +15,24 @@
       </p>
     </div>
     <!-- 卡片身体的底部:认证成功的结构、认证未成功的结构 -->
-    <el-descriptions
-        v-if=true
-        size="small"
-        class="margin-top"
-        :column="1"
-        border
-        style="margin: 20px auto"
-    >
+    <el-descriptions v-if=true size="small" class="margin-top" :column="1" border style="margin: 20px auto">
       <el-descriptions-item label-align="center" :width="20">
         <template #label>
           <div class="cell-item">用户姓名</div>
         </template>
-        xxxxx
+        {{ realName.name }}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" :width="20">
         <template #label>
           <div class="cell-item">证件类型</div>
         </template>
-        xxxxx
+        {{ realName.certificatesType==='10'?'身份证':'户口本' }}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" width="20px">
         <template #label>
           <div class="cell-item">证件号码</div>
         </template>
-        xxxxx
+        {{ realName.certificatesNo }}
       </el-descriptions-item>
     </el-descriptions>
     <!-- 用户未验证的结构 -->
@@ -97,8 +90,22 @@
 </template>
 
 <script setup lang="ts">
-
 import {InfoFilled} from "@element-plus/icons-vue";
+import {reqRealName} from "@/api/member";
+import {ref,onMounted} from "vue";
+import {UserInfo} from "@/api/member/type.ts";
+
+//获取实名信息
+const realName = ref<UserInfo>({} as UserInfo)
+const getRealName =async ()=>{
+  const res = await reqRealName()
+  console.log(res)
+  if (res.code===200){
+    realName.value = res.data
+  }
+}
+onMounted(()=>getRealName())
+
 </script>
 
 <style scoped lang="scss">
