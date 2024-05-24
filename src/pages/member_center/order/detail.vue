@@ -58,7 +58,6 @@ import {reqCancelOrder, reqOrderInfo, reqOrderStatus, reqQRcode} from "@/api/mem
       //查询订单状态 创建定时器
       timer.value = setInterval(async ()=>{
         const res = await reqOrderStatus(route.query.orderId as string)
-        console.log(res)
         if (res.data){
           //支付成功逻辑 1.关闭弹窗
           dialogTableVisible.value=false
