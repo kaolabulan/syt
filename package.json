@@ -14,11 +14,13 @@
     "axios": "^1.6.8",
     "element-plus": "^2.7.1",
     "pinia": "^2.1.7",
+    "qrcode": "^1.5.3",
     "sass": "^1.76.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
+    "@types/qrcode": "^1.5.5",
     "@vitejs/plugin-vue": "^5.0.4",
     "typescript": "^5.2.2",
     "unplugin-auto-import": "^0.17.6",

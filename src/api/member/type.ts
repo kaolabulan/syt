@@ -44,6 +44,16 @@ export interface OrderInfo extends ResponseData{
   data:OrderInfoData
 }
 
+//支付二维码TS类型
+export interface QRcodeData{
+  "codeUrl": string,
+  "orderId": number,
+  "totalFee": number,
+  "resultCode": string
+}
+export interface QRcodeInfo extends ResponseData{
+  data:QRcodeData
+}
 
 
 

@@ -1,10 +1,15 @@
 <script setup lang="ts">
-  import {reqCancelOrder, reqOrderInfo} from "@/api/member";
+  import {reqCancelOrder, reqOrderInfo, reqQRcode} from "@/api/member";
   import {onMounted, ref} from "vue";
   import {useRoute} from "vue-router";
-  import { OrderInfoData} from "@/api/member/type.ts";
+  import {OrderInfoData, QRcodeInfo} from "@/api/member/type.ts";
   import {ElMessage} from "element-plus";
+  //@ts-ignore
+  import QRCode from 'qrcode'
+
   const route = useRoute()
+
+
   //获取订单详情数据
   const orderInfo = ref<OrderInfoData>({} as OrderInfoData)
   const getOrderInfo =async ()=>{
@@ -29,15 +34,29 @@
   }
 
   //支付弹窗
-  const dialogTableVisible = ref(true)
+  const dialogTableVisible = ref(false)
 
   const closeDialog = ()=>{
     dialogTableVisible.value = false
+  }
+  const openDialog = ()=>{
+    dialogTableVisible.value=true
+    getQRcodeInfo()
+  }
+
+  //获取支付二维码
+  const imgUrl = ref<string>("");
+  const getQRcodeInfo =async ()=>{
+    const res:QRcodeInfo = await reqQRcode(route.query.orderId as string)
+    if (res.code===200){
+      imgUrl.value = await QRCode.toDataURL(res.data.codeUrl)
+    }
   }
 </script>
 
 <template>
   <div class="detail-order">
+
     <el-card class="box-card">
       <!--卡片头部-->
       <template #header>
@@ -124,7 +143,7 @@
                   <el-button>取消预约</el-button>
                 </template>
               </el-popconfirm>
-              <el-button @click="dialogTableVisible=true" v-if="orderInfo.orderStatus===0" type="primary" size="default">支付</el-button>
+              <el-button @click="openDialog" v-if="orderInfo.orderStatus===0" type="primary" size="default">支付</el-button>
             </div>
           </div>
           <div class="left">
@@ -154,7 +173,7 @@
 
     <el-dialog @close="closeDialog" v-model="dialogTableVisible" title="微信支付" width="400">
       <div class="dialog-body">
-        <img src="@/assets/images/code_login_wechat.png" alt="">
+        <img :src="imgUrl" alt="">
         <p>请使用微信扫一扫</p>
         <p>扫描二维码支付</p>
       </div>
