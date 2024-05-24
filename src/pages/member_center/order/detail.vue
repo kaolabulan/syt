@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import {reqCancelOrder, reqOrderInfo, reqQRcode} from "@/api/member";
+import {reqCancelOrder, reqOrderInfo, reqOrderStatus, reqQRcode} from "@/api/member";
   import {onMounted, ref} from "vue";
   import {useRoute} from "vue-router";
   import {OrderInfoData, QRcodeInfo} from "@/api/member/type.ts";
@@ -38,6 +38,10 @@
 
   const closeDialog = ()=>{
     dialogTableVisible.value = false
+    //关闭定时器
+    clearInterval(timer.value)
+    //更新页面
+    getOrderInfo()
   }
   const openDialog = ()=>{
     dialogTableVisible.value=true
@@ -46,10 +50,24 @@
 
   //获取支付二维码
   const imgUrl = ref<string>("");
+  const timer = ref<any>()
   const getQRcodeInfo =async ()=>{
     const res:QRcodeInfo = await reqQRcode(route.query.orderId as string)
     if (res.code===200){
       imgUrl.value = await QRCode.toDataURL(res.data.codeUrl)
+      //查询订单状态 创建定时器
+      timer.value = setInterval(async ()=>{
+        const res = await reqOrderStatus(route.query.orderId as string)
+        console.log(res)
+        if (res.data){
+          //支付成功逻辑 1.关闭弹窗
+          dialogTableVisible.value=false
+          //2.关闭定时器
+          clearInterval(timer.value)
+          //3.更新页面
+          await getOrderInfo()
+        }
+      },2000)
     }
   }
 </script>

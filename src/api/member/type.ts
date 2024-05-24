@@ -55,6 +55,9 @@ export interface QRcodeInfo extends ResponseData{
   data:QRcodeData
 }
 
-
+//支付状态TS类型
+export interface OrderStatus extends ResponseData{
+  data:boolean
+}
 
 
