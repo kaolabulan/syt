@@ -83,5 +83,29 @@ export interface UserInfo {
 export interface UseringoResponseData extends ResponseData {
   data: UserInfo
 }
+//代表证件类型的数据ts
+export interface CertationType {
+  "id": number,
+  "createTime": string,
+  "updateTime": string,
+  "isDeleted": number,
+  "param": {
 
-
+  },
+  "parentId": number,
+  "name": string,
+  "value": string,
+  "dictCode": string,
+  "hasChildren": boolean
+}
+export type CertationArr = CertationType[];
+export interface CertationTypeResponseData extends ResponseData {
+  data: CertationArr
+}
+//用户认证的携带的参数的ts类型
+export interface UserParams {
+  "certificatesNo": string,
+  "certificatesType": string,
+  "certificatesUrl": string,
+  "name": string
+}

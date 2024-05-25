@@ -36,22 +36,18 @@
       </el-descriptions-item>
     </el-descriptions>
     <!-- 用户未验证的结构 -->
-    <el-form
-        v-if=true
-        style="width: 60%; margin: 20px auto"
-        label-width="80"
-    >
+    <el-form v-if=true :model="formData"
+             style="width: 60%; margin: 20px auto" label-width="80">
       <el-form-item label="用户姓名" prop="name">
-        <el-input placeholder="请输入用户姓名"></el-input>
+        <el-input v-model="formData.name" placeholder="请输入用户姓名"></el-input>
       </el-form-item>
       <el-form-item label="证件类型" prop="certificatesType">
-        <el-select style="width: 100%" placeholder="请选择证件类型">
-          <el-option value="身份证"></el-option>
-          <el-option value="户口本"></el-option>
+        <el-select v-model="formData.certificatesType" style="width: 100%" placeholder="请选择证件类型">
+          <el-option :label="item.name" :value="item.value" v-for="item in realType" :key="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="证件号码" prop="certificatesNo">
-        <el-input placeholder="请输入证件号码"></el-input>
+        <el-input v-model="formData.certificatesNo" placeholder="请输入证件号码"></el-input>
       </el-form-item>
       <el-form-item label="上传证件" prop="certificatesUrl">
         <!-- action:upload组件向服务器提交图片路径
@@ -63,27 +59,27 @@
             list-type="picture-card"
             :limit="1"
             action="/api/oss/file/fileUpload?fileHost=userAuah"
-        >
+            :on-remove="handleRemove"
+            :on-preview="handlePictureCardPreview"
+            :on-success="successhandler"
+            :on-exceed="exceedhandler">
+
           <img
               style="width: 100%; height: 100%"
-              src="../../../assets/images/auth_example.png"
-              alt=""
-          />
+              v-if="formData.certificatesUrl"
+              :src="formData.certificatesUrl"
+              alt="Preview Image"/>
         </el-upload>
 
         <el-dialog>
-          <img
-              w-full
-
-              style="width: 100%; height: 100%"
+          <img w-full style="width: 100%; height: 100%"
               src="@/assets/images/auth_example.png"
-              alt="Preview Image"
-          />
+              alt="Preview Image"/>
         </el-dialog>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="default">提交</el-button>
-        <el-button type="primary" size="default">重写</el-button>
+        <el-button @click="submit" type="primary" size="default">提交</el-button>
+        <el-button @click="reset" type="primary" size="default">重写</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -91,21 +87,93 @@
 
 <script setup lang="ts">
 import {InfoFilled} from "@element-plus/icons-vue";
-import {reqRealName} from "@/api/member";
-import {ref,onMounted} from "vue";
-import {UserInfo} from "@/api/member/type.ts";
+import {reqRealName, reqRealTs, reqUserCertation} from "@/api/member";
+import {ref, onMounted, reactive} from "vue";
+import {CertationArr, UserInfo, UserParams} from "@/api/member/type.ts";
+import {ElMessage} from "element-plus";
 
 //获取实名信息
 const realName = ref<UserInfo>({} as UserInfo)
 const getRealName =async ()=>{
   const res = await reqRealName()
-  console.log(res)
   if (res.code===200){
     realName.value = res.data
   }
 }
 onMounted(()=>getRealName())
 
+//获取证件类型
+const realType = ref<CertationArr>([] as CertationArr)
+const getRealType =async ()=>{
+  const res = await reqRealTs()
+  if (res.code===200){
+    realType.value = res.data
+  }
+}
+onMounted(()=>getRealType())
+
+//表单数据
+const formData = reactive<UserParams>({
+  "certificatesNo": '',
+  "certificatesType": '',
+  "certificatesUrl": '',
+  "name": '',
+})
+//超出数量的钩子
+const exceedhandler = () => {
+  ElMessage({
+    type: "error",
+    message: "图片只能上传一张图片",
+  });
+};
+//图品上传成功的钩子
+const successhandler = (response: any) => {
+  // //如果图片上传成功校验结果清除
+  // form.value.clearValidate('certificatesUrl');
+
+  //收集上传成功图片地址
+  //response:上传图片请求服务器返回的数据
+  //uploadFile上传文件对象
+  formData.certificatesUrl = response.data;
+};
+
+//照片墙预览的钩子
+const dialogVisible = ref<boolean>(false)
+const handlePictureCardPreview = () => {
+  //触发预览的钩子的时候，对话框显示
+  dialogVisible.value = true;
+};
+
+//找皮墙删除图片的钩子
+const handleRemove = () => {
+  formData.certificatesUrl = "";
+};
+//重写按钮
+const upload = ref()
+const reset = ()=>{
+  upload.value.clearFiles()
+  Object.assign(formData,{
+    "certificatesNo": '',
+    "certificatesType": '',
+    "certificatesUrl": '',
+    "name": '',
+  })
+}
+//提交按钮
+const submit =async ()=>{
+  try {
+    await reqUserCertation(formData)
+    ElMessage({
+      type:'success',
+      message:'认证成功'
+    })
+  }catch (error) {
+    ElMessage({
+      type:'error',
+      message:'认证失败'
+    })
+  }
+}
 </script>
 
 <style scoped lang="scss">
