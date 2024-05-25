@@ -1,6 +1,6 @@
 import request from "@/utils/request.ts";
 import {
-  CertationTypeResponseData,
+  CertationTypeResponseData, OrderAll,
   OrderData,
   OrderInfo,
   OrderStatus,
@@ -24,6 +24,8 @@ export const reqRealName = ()=>request.get<any,UseringoResponseData>('/user/auth
 export const reqRealTs = (dictCode = 'CertificatesType')=>request.get<any,CertationTypeResponseData>(`/cmn/dict/findByDictCode/${dictCode}`)
 //用户认证接口
 export const reqUserCertation =(data:UserParams)=> request.post<any,any>('/api/user/auth/userAuah',data)
+//获取所有订单数据
+export const reqAllOrder = (page:number,limit:number,patientId:string,orderStatus:string)=>request.get<any,OrderAll>(`/order/orderInfo/auth/${page}/${limit}?patientId=${patientId}&orderStatus=${orderStatus}`)
 
 
 

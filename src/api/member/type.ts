@@ -109,3 +109,48 @@ export interface UserParams {
   "certificatesUrl": string,
   "name": string
 }
+//所有订单TS类型
+export interface RecordsItem{
+  "id": number,
+  "createTime": string,
+  "updateTime": string,
+  "isDeleted": number,
+  "param": {
+    "orderStatusString": string
+  },
+  "userId": number,
+  "outTradeNo": string,
+  "hoscode": string,
+  "hosname": string,
+  "depcode": string,
+  "depname": string,
+  "scheduleId": null,
+  "title": string,
+  "reserveDate": string,
+  "reserveTime": number,
+  "patientId": number,
+  "patientName": string,
+  "patientPhone": string,
+  "hosRecordId": string,
+  "number": number,
+  "fetchTime": string,
+  "fetchAddress": string,
+  "amount": number,
+  "quitTime": string,
+  "orderStatus": number
+}
+export interface OrderAllData{
+  "records": RecordsItem[],
+  "total": number,
+  "size": number,
+  "current": number,
+  "orders": [
+
+  ],
+  "hitCount": boolean,
+  "searchCount": boolean,
+  "pages": number
+}
+export interface OrderAll extends ResponseData{
+  data:OrderAllData
+}

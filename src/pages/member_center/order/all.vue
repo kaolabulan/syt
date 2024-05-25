@@ -1,9 +1,30 @@
 <script setup lang="ts">
-
 import {ref} from "vue";
+import {reqAllOrder} from "@/api/member";
+import { RecordsItem} from "@/api/member/type.ts";
+import {useRouter} from "vue-router";
+const router = useRouter()
 
 const pageNo = ref<number>(1)
 const pageSize = ref<number>(10)
+const patientId = ref<string>('')
+const orderStatus = ref<string>('')
+const total = ref<number>(0)
+//获取所有订单数据
+const allOrderInfo = ref<RecordsItem[]>([] as RecordsItem[])
+const getAllOrder =async ()=>{
+  const res = await reqAllOrder(pageNo.value,pageSize.value,patientId.value,orderStatus.value)
+  console.log(res)
+  if (res.code===200){
+    allOrderInfo.value=res.data.records
+    total.value=res.data.total
+  }
+}
+onMounted(()=>getAllOrder())
+//跳转详情
+const goDetail=(row)=>{
+  router.push({path:'/member/order',query:{orderId:row.id}})
+}
 </script>
 
 <template>
@@ -33,15 +54,19 @@ const pageSize = ref<number>(10)
           </el-form-item>
         </el-form>
 
-        <el-table>
-          <el-table-column label="就诊时间"></el-table-column>
-          <el-table-column label="医院"></el-table-column>
-          <el-table-column label="科室"></el-table-column>
-          <el-table-column label="医生"></el-table-column>
-          <el-table-column label="服务费"></el-table-column>
-          <el-table-column label="就诊人"></el-table-column>
-          <el-table-column label="订单状态"></el-table-column>
-          <el-table-column label="操作"></el-table-column>
+        <el-table :data="allOrderInfo">
+          <el-table-column label="就诊时间" prop="reserveDate"></el-table-column>
+          <el-table-column label="医院" prop="hosname"></el-table-column>
+          <el-table-column label="科室" prop="depname"></el-table-column>
+          <el-table-column label="医生" prop="title"></el-table-column>
+          <el-table-column label="服务费" prop="amount"></el-table-column>
+          <el-table-column label="就诊人" prop="patientName"></el-table-column>
+          <el-table-column label="订单状态" prop="param.orderStatusString"></el-table-column>
+          <el-table-column label="操作">
+            <template #default="{row}">
+              <el-button type="text" @click="goDetail(row)">详情</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
 
@@ -54,7 +79,7 @@ const pageSize = ref<number>(10)
 
             :background="true"
             layout=" prev, pager, next, jumper ->, sizes,total,"
-            :total="400"
+            :total="total"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
         />
