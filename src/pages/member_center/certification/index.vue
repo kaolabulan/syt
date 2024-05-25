@@ -36,7 +36,7 @@
       </el-descriptions-item>
     </el-descriptions>
     <!-- 用户未验证的结构 -->
-    <el-form v-if=true :model="formData"
+    <el-form ref="formRef" v-if=true :model="formData" :rules="rules"
              style="width: 60%; margin: 20px auto" label-width="80">
       <el-form-item label="用户姓名" prop="name">
         <el-input v-model="formData.name" placeholder="请输入用户姓名"></el-input>
@@ -63,17 +63,19 @@
             :on-preview="handlePictureCardPreview"
             :on-success="successhandler"
             :on-exceed="exceedhandler">
-
           <img
               style="width: 100%; height: 100%"
-              v-if="formData.certificatesUrl"
-              :src="formData.certificatesUrl"
-              alt="Preview Image"/>
+              src="../../../assets/images/auth_example.png"
+              alt=""/>
+
         </el-upload>
 
-        <el-dialog>
-          <img w-full style="width: 100%; height: 100%"
-              src="@/assets/images/auth_example.png"
+        <el-dialog v-model="dialogVisible">
+          <img
+              w-full
+              v-if="formData.certificatesUrl"
+              style="width: 100%; height: 100%"
+              :src="formData.certificatesUrl"
               alt="Preview Image"/>
         </el-dialog>
       </el-form-item>
@@ -86,11 +88,12 @@
 </template>
 
 <script setup lang="ts">
-import {InfoFilled} from "@element-plus/icons-vue";
+import {InfoFilled,} from "@element-plus/icons-vue";
 import {reqRealName, reqRealTs, reqUserCertation} from "@/api/member";
 import {ref, onMounted, reactive} from "vue";
 import {CertationArr, UserInfo, UserParams} from "@/api/member/type.ts";
 import {ElMessage} from "element-plus";
+
 
 //获取实名信息
 const realName = ref<UserInfo>({} as UserInfo)
@@ -129,12 +132,13 @@ const exceedhandler = () => {
 //图品上传成功的钩子
 const successhandler = (response: any) => {
   // //如果图片上传成功校验结果清除
-  // form.value.clearValidate('certificatesUrl');
+  formRef.value.clearValidate('certificatesUrl');
 
   //收集上传成功图片地址
   //response:上传图片请求服务器返回的数据
   //uploadFile上传文件对象
   formData.certificatesUrl = response.data;
+
 };
 
 //照片墙预览的钩子
@@ -161,6 +165,7 @@ const reset = ()=>{
 }
 //提交按钮
 const submit =async ()=>{
+  await formRef.value.validate()
   try {
     await reqUserCertation(formData)
     ElMessage({
@@ -174,6 +179,49 @@ const submit =async ()=>{
     })
   }
 }
+//自定义校验规则
+const validatorName=(rule:any,value:any,callback:any)=>{
+  let reg = /^[\u4E00-\u9FA5]{2,10}(·[\u4E00-\u9FA5]{2,10}){0,2}$/;
+  if (reg.test(value)){
+    callback()
+  }else {
+    callback(new Error('请输入正确的名字'))
+  }
+}
+const validatorType=(rule:any,value:any,callback:any)=>{
+  if (value==='10'||value==='20'){
+    callback()
+  }else {
+    callback(new Error('请选择正确的证件类型'))
+  }
+}
+const validatorNo=(rule:any,value:any,callback:any)=>{
+  let sfz = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/;
+  let hkb = /^\d{9}$/;
+  if (sfz.test(value)||hkb.test(value)){
+    callback()
+  }else {
+    callback(new Error('请输入正确的证件号码'))
+  }
+}
+const validatorUrl=(rule:any,value:any,callback:any)=>{
+  if (value.length){
+    callback()
+  }else {
+    callback(new Error('请上传证件照'))
+  }
+}
+//表单校验规则
+// { required: true, message: 'Please input Activity name', trigger: 'blur' },
+//  pass: [{ validator: validatePass, trigger: 'blur' }],
+const rules = {
+  name:[{required:true,validator:validatorName,trigger:'change'}],
+  certificatesType:[{required:true,validator:validatorType,trigger:'change'}],
+  certificatesNo:[{required:true,validator:validatorNo,trigger:'change'}],
+  certificatesUrl:[{required:true,validator:validatorUrl,trigger:'change'}],
+
+}
+const formRef = ref()
 </script>
 
 <style scoped lang="scss">
