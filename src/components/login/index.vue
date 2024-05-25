@@ -16,7 +16,7 @@
   }
   //登录输入
   const loginParams = reactive({
-    phone:'',
+    phone:'17720125002',
     code:'',
   })
   //计算输入是否合法
@@ -86,7 +86,7 @@
 
 //关闭登录窗口清空数据
   const close = ()=>{
-    Object.assign(loginParams,{phone:'',code:''})
+    Object.assign(loginParams,{phone:'17720125002',code:''})
     formRef.value.resetFields()
   }
   const closeDialog = ()=>{

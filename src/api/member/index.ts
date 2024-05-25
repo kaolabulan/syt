@@ -1,5 +1,7 @@
 import request from "@/utils/request.ts";
 import {
+  AllOrderStateResponseData,
+  AllUserResponseData,
   CertationTypeResponseData, OrderAll,
   OrderData,
   OrderInfo,
@@ -26,6 +28,9 @@ export const reqRealTs = (dictCode = 'CertificatesType')=>request.get<any,Certat
 export const reqUserCertation =(data:UserParams)=> request.post<any,any>('/api/user/auth/userAuah',data)
 //获取所有订单数据
 export const reqAllOrder = (page:number,limit:number,patientId:string,orderStatus:string)=>request.get<any,OrderAll>(`/order/orderInfo/auth/${page}/${limit}?patientId=${patientId}&orderStatus=${orderStatus}`)
-
+//获取全部就诊人的信息
+export const reqAllUser = () => request.get<any, AllUserResponseData>('/user/patient/auth/findAll');
+//获取全部订单的接口
+export const reqOrderState = () => request.get<any, AllOrderStateResponseData>('/order/orderInfo/auth/getStatusList');
 
 

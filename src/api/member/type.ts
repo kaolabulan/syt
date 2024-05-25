@@ -154,3 +154,60 @@ export interface OrderAllData{
 export interface OrderAll extends ResponseData{
   data:OrderAllData
 }
+
+//代表就诊人ts类型
+export interface User {
+  "id": number,
+  "createTime": string,
+  "updateTime": string,
+  "isDeleted": number,
+  "param": {
+    "certificatesTypeString": string,
+    "contactsCertificatesTypeString": string,
+    "cityString": null,
+    "fullAddress": string,
+    "districtString": null,
+    "provinceString": null
+  },
+  "userId": number,
+  "name": string,
+  "certificatesType": string,
+  "certificatesNo": string,
+  "sex": number,
+  "birthdate": string,
+  "phone": string,
+  "isMarry": number,
+  "provinceCode": null,
+  "cityCode": null,
+  "districtCode": null,
+  "address": string,
+  "contactsName": string,
+  "contactsCertificatesType": string,
+  "contactsCertificatesNo": string,
+  "contactsPhone": string,
+  "isInsure": number,
+  "cardNo": null,
+  "status": string
+}
+//全部就诊人的数据ts类型
+export type AllUser = User[];
+
+//获取全部就诊人的ts类型
+export interface AllUserResponseData extends ResponseData {
+  data: AllUser
+}
+
+//订单状态ts类型
+export interface OrderState {
+  "comment": string,
+  "status": number
+}
+
+export type AllOrderState = OrderState[];
+//全部订单状态码接口返回的数据ts类型
+export interface AllOrderStateResponseData extends ResponseData {
+  data: AllOrderState
+}
+
+
+
