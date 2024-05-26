@@ -1,5 +1,6 @@
 import request from "@/utils/request.ts";
 import {
+  AddOrUpdateUser,
   AllOrderStateResponseData,
   AllUserResponseData,
   CertationTypeResponseData, CityInfo, OrderAll,
@@ -34,4 +35,15 @@ export const reqAllUser = () => request.get<any, AllUserResponseData>('/user/pat
 export const reqOrderState = () => request.get<any, AllOrderStateResponseData>('/order/orderInfo/auth/getStatusList');
 //获取地址下拉数据
 export const reqCityInfo =(parentId:number)=> request.get<any,CityInfo>(`/cmn/dict/findByParentId/${parentId}`)
+//新增与修改已有的就诊人接口方法
+export const reqAddOrUpdateUser = (data: AddOrUpdateUser) => {
+  if (data.id) {
+    return request.put<any, any>('/user/patient/auth/update', data);
+  } else {
+    return request.post<any, any>('/user/patient/auth/save', data);
+  }
+}
+
+
+
 

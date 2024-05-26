@@ -6,7 +6,9 @@ import "@/style/reset.scss"
 import HospitalTop from "@/components/hospital_top/index.vue"
 import HospitalBottom from "@/components/hospital_bottom/index.vue"
 import Login from "@/components/login/index.vue"
-
+//引入Elmessage和Elloading的css样式文件
+import 'element-plus/theme-chalk/el-loading.css';
+import 'element-plus/theme-chalk/el-message.css';
 //引入vue-router
 import router from "@/router";
 //引入pinia

@@ -7,7 +7,7 @@
       </div>
       <div class="right">
 
-        <el-button circle type="primary" size="default" :icon="Edit"></el-button>
+        <el-button @click="goAlter" circle type="primary" size="default" :icon="Edit"></el-button>
 
         <el-popconfirm :title="`你确定要删除`" width="200px" v-if="route.path==='/member/patient'">
           <template #reference>
@@ -36,12 +36,24 @@
 <script setup lang="ts">
 import {Delete, Edit} from "@element-plus/icons-vue";
 import {computed} from "vue";
-import {useRoute} from "vue-router";
+import {useRoute,useRouter} from "vue-router";
+import {useVisitorStore} from "@/store/visitorStore.ts";
 
 const route = useRoute()
+const router = useRouter()
 const props = defineProps(['visitorItem','clickId'])
 const isClick = computed(()=>props.visitorItem.id===props.clickId)
+const visitorStore = useVisitorStore()
 
+const goAlter=()=>{
+  visitorStore.reset(props.visitorItem)
+  if (route.path==='/member/patient'){
+    visitorStore.changeShow(false)
+  }else {
+    visitorStore.changeShow(false)
+    router.push({path:'/member/patient',query:{docId:route.query.docId}})
+  }
+}
 </script>
 
 <style scoped lang="scss">

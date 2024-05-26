@@ -44,6 +44,12 @@ const goOrder =async ()=>{
   }
 
 }
+//跳转增加就诊人
+const goAdd=()=>{
+  router.push({path:'/member/patient',query:{docId:route.query.docId}})
+  visitorStore.changeShow(false)
+  visitorStore.reset()
+}
 </script>
 
 <template>
@@ -54,7 +60,7 @@ const goOrder =async ()=>{
       <template #header>
         <div class="card-header">
           <span>请选择就诊人信息</span>
-          <el-button type="primary" size="default" :icon="User">添加就诊人</el-button>
+          <el-button @click="goAdd" type="primary" size="default" :icon="User">添加就诊人</el-button>
         </div>
       </template>
       <div class="user">
