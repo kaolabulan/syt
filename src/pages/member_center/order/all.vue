@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {reqAllOrder, reqAllUser, reqOrderState} from "@/api/member";
-import {AllUser, RecordsItem} from "@/api/member/type.ts";
+import {reqAllOrder, reqOrderState} from "@/api/member";
+import {AllOrderState, RecordsItem} from "@/api/member/type.ts";
 import {useRouter} from "vue-router";
+import {useVisitorStore} from "@/store/visitorStore.ts";
+
 const router = useRouter()
+const visitorStore = useVisitorStore()
 
 const pageNo = ref<number>(1)
 const pageSize = ref<number>(10)
@@ -21,30 +24,24 @@ const getAllOrder =async ()=>{
 }
 onMounted(()=>{
   getAllOrder()
-  getAllUser()
+  visitorStore.getAllUser()
   getOrderState()
 })
-const sizeChange=(size)=>{
+const sizeChange=(size:number)=>{
   pageSize.value=size
   getAllOrder()
 }
-const pageChange=(page)=>{
+const pageChange=(page:number)=>{
   pageNo.value=page
   getAllOrder()
 }
 //跳转详情
-const goDetail=(row)=>{
+const goDetail=(row:any)=>{
   router.push({path:'/member/order',query:{orderId:row.id}})
 }
 //获取就诊人和订单状态数据
-const allUserArr = ref<AllUser>([] as AllUser)
-const getAllUser=async ()=>{
-  const res = await reqAllUser()
-  if (res.code===200){
-    allUserArr.value=res.data
-  }
-}
-const orderStateArr=ref([])
+
+const orderStateArr=ref<AllOrderState>([] as AllOrderState)
 const getOrderState=async ()=>{
   const res = await reqOrderState()
   if (res.code===200){
@@ -67,7 +64,7 @@ const getOrderState=async ()=>{
           <el-form-item label="就诊人选择">
             <el-select @change="getAllOrder" v-model="patientId" placeholder="所有就诊人" style="width: 200px">
               <el-option label="所有就诊人" value=""></el-option>
-              <el-option v-for="item in allUserArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              <el-option v-for="item in visitorStore.allUserInfo" :key="item.id" :label="item.name" :value="item.id"></el-option>
 
             </el-select>
           </el-form-item>

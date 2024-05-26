@@ -133,44 +133,6 @@ export interface DoctorWork extends ResponseData{
 
 
 
-//代表的是一个就诊人数据ts类型
-export interface VisitorItem {
-  "id": number,
-  "createTime": string,
-  "updateTime": string,
-  "isDeleted": number,
-  "param": {
-    "certificatesTypeString": string,
-    "contactsCertificatesTypeString": string,
-    "cityString": null,
-    "fullAddress": string,
-    "districtString": null,
-    "provinceString": null
-  },
-  "userId": number,
-  "name": number,
-  "certificatesType": string,
-  "certificatesNo": string,
-  "sex": number,
-  "birthdate": string,
-  "phone": string,
-  "isMarry": number,
-  "provinceCode": null,
-  "cityCode": null,
-  "districtCode": null,
-  "address": string,
-  "contactsName": string,
-  "contactsCertificatesType": string,
-  "contactsCertificatesNo": string,
-  "contactsPhone": string,
-  "isInsure": number,
-  "cardNo": null,
-  "status": string
-}
-export type VisitorData = VisitorItem[];
-export interface UserResponseData extends ResponseData {
-  data: VisitorData
-}
 
 //排班挂号医生ID数据TS类型
 export interface IdInfoData {

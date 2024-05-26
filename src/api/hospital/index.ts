@@ -1,6 +1,6 @@
 import request from "@/utils/request.ts";
 import type {HospitalDetail,Department,LoginData,UserInfoData,HospitalWork} from "@/api/hospital/type.ts";
-import {DoctorWork, IdInfo, UserResponseData} from "@/api/hospital/type.ts";
+import {DoctorWork, IdInfo} from "@/api/hospital/type.ts";
 //医院预约挂号详情
 export const reqHospitalRegister = (hoscode:string)=>request.get<any,HospitalDetail>(`/hosp/hospital/${hoscode}`)
 //获取医院科室信息
@@ -15,8 +15,7 @@ export const reqUserLogin = (data:LoginData) => request.post<any,UserInfoData>('
 export const reqHospitalWork = (page:number,limit:number,hoscode:string,depcode:string)=>request.get<any,HospitalWork>(`/hosp/hospital/auth/getBookingScheduleRule/${page}/${limit}/${hoscode}/${depcode}`)
 //获取某一天对应的排班数据
 export const reqDoctorWork = (hoscode:string,depcode:string,workDate:string)=>request.get<any,DoctorWork>(`/hosp/hospital/auth/findScheduleList/${hoscode}/${depcode}/${workDate}`)
-//就诊人信息
-export const reqVisitor = ()=>request.get<any,UserResponseData>('/user/patient/auth/findAll')
+
 //排班挂号医生ID数据
 export const reqDoctorIdInfo = (scheduleId:string)=>request.get<any,IdInfo>(`/hosp/hospital/getSchedule/${scheduleId}`)
 

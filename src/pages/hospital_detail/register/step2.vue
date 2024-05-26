@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import {User} from "@element-plus/icons-vue";
 import Visitor from "@/pages/hospital_detail/register/visitor.vue";
-import {reqDoctorIdInfo, reqVisitor} from "@/api/hospital";
+import {reqDoctorIdInfo} from "@/api/hospital";
 import {onMounted, ref} from "vue";
-import {IdInfoData, VisitorData} from "@/api/hospital/type.ts";
+import {IdInfoData} from "@/api/hospital/type.ts";
 import {useRoute,useRouter} from "vue-router";
 import {reqOrderId} from "@/api/member";
 import {OrderData} from "@/api/member/type.ts";
 import {ElMessage} from "element-plus";
+import {useVisitorStore} from "@/store/visitorStore.ts";
 
 const route = useRoute()
 const router = useRouter()
+const visitorStore = useVisitorStore()
 //就诊人数据
-const visitorInfo = ref<VisitorData>({} as VisitorData)
-const getVisitor =async ()=>{
-  const res =await reqVisitor()
-  visitorInfo.value = res.data
-}
-onMounted(()=>getVisitor())
+
+onMounted(()=>visitorStore.getAllUser())
 //挂号医师数据
 const doctorInfo = ref<IdInfoData>({} as IdInfoData)
 const getDoctorWorking =async ()=>{
@@ -60,7 +58,7 @@ const goOrder =async ()=>{
         </div>
       </template>
       <div class="user">
-        <Visitor :clickId="clickId"  @click="activeClick(p)" :visitorItem="p"  v-for="p in visitorInfo" :key="p.id" class="item"></Visitor>
+        <Visitor :clickId="clickId"  @click="activeClick(p)" :visitorItem="p"  v-for="p in visitorStore.allUserInfo" :key="p.id" class="item"></Visitor>
       </div>
     </el-card>
     <!--展示医生信息的卡片  -->
