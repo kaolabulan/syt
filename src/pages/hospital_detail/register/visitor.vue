@@ -7,11 +7,11 @@
       </div>
       <div class="right">
 
-        <el-button circle type="primary" size="default" :icon="EditPen"></el-button>
+        <el-button circle type="primary" size="default" :icon="Edit"></el-button>
 
-        <el-popconfirm :title="`你确定要删除`" width="200px">
+        <el-popconfirm :title="`你确定要删除`" width="200px" v-if="route.path==='/member/patient'">
           <template #reference>
-            <el-button circle type="danger" size="default" :icon="User"></el-button>
+            <el-button circle type="danger" size="default" :icon="Delete"></el-button>
           </template>
         </el-popconfirm>
       </div>
@@ -26,7 +26,7 @@
       <p>当前住址: {{visitorItem.param.cityString}}</p>
       <p>详细地址：{{visitorItem.param.fullAddress}}</p>
       <!-- 红色的已经选择的盒子 -->
-      <transition name="confirm">
+      <transition name="confirm" v-if="route.path!=='/member/patient'">
         <div class="confirm" v-if="isClick">已选择</div>
       </transition>
     </div>
@@ -34,8 +34,11 @@
 </template>
 
 <script setup lang="ts">
-import {EditPen, User} from "@element-plus/icons-vue";
+import {Delete, Edit} from "@element-plus/icons-vue";
 import {computed} from "vue";
+import {useRoute} from "vue-router";
+
+const route = useRoute()
 const props = defineProps(['visitorItem','clickId'])
 const isClick = computed(()=>props.visitorItem.id===props.clickId)
 
