@@ -2,7 +2,7 @@ import request from "@/utils/request.ts";
 import {
   AllOrderStateResponseData,
   AllUserResponseData,
-  CertationTypeResponseData, OrderAll,
+  CertationTypeResponseData, CityInfo, OrderAll,
   OrderData,
   OrderInfo,
   OrderStatus,
@@ -32,5 +32,6 @@ export const reqAllOrder = (page:number,limit:number,patientId:string,orderStatu
 export const reqAllUser = () => request.get<any, AllUserResponseData>('/user/patient/auth/findAll');
 //获取全部订单的接口
 export const reqOrderState = () => request.get<any, AllOrderStateResponseData>('/order/orderInfo/auth/getStatusList');
-
+//获取地址下拉数据
+export const reqCityInfo =(parentId:number)=> request.get<any,CityInfo>(`/cmn/dict/findByParentId/${parentId}`)
 

@@ -1,5 +1,36 @@
 <script setup lang="ts">
+import {CertationArr} from "@/api/member/type.ts";
+import {reqCityInfo, reqRealTs} from "@/api/member/index.ts";
+import {ref} from "vue";
+import type { CascaderProps } from 'element-plus'
+//获取证件类型
 
+const realType = ref<CertationArr>([] as CertationArr)
+const getRealType =async ()=>{
+  const res = await reqRealTs()
+  console.log(res)
+  if (res.code===200){
+    realType.value = res.data
+  }
+}
+onMounted(()=>getRealType())
+
+//级联选择器
+const props: CascaderProps = {
+  lazy: true,
+  async lazyLoad(node:any, resolve:any) {
+    const res = await reqCityInfo(node.data?.id as number||86 )
+    const showData = res.data.map((item:any)=>{
+      return{
+        id:item.id,
+        label:item.name,
+        value:item.value,
+        leaf:!item.hasChildren
+      }
+    })
+    resolve(showData)
+  }
+}
 </script>
 
 <template>
@@ -11,10 +42,8 @@
         <el-input placeholder="请你输入用户姓名"></el-input>
       </el-form-item>
       <el-form-item label="证件类型">
-        <el-select
-            placeholder="请你选择证件的类型"
-            style="width: 100%">
-          <el-option></el-option>
+        <el-select placeholder="请你选择证件的类型" style="width: 100%">
+          <el-option v-for="item in realType" :key="item.id" :label="item.name" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="证件号码">
@@ -54,7 +83,8 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="当前的住址">
-        <el-cascader/>
+        <!--  级联选择器      -->
+        <el-cascader :props="props" />
       </el-form-item>
       <el-form-item label="详细地址">
         <el-input placeholder="请你输入用户详细地址"></el-input>
@@ -67,7 +97,7 @@
       </el-form-item>
       <el-form-item label="证件类型">
         <el-select placeholder="请你选择证件的类型" style="width: 100%">
-          <el-option></el-option>
+          <el-option v-for="item in realType" :key="item.id" :label="item.name" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="证件号码">

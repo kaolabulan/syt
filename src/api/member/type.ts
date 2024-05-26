@@ -208,6 +208,21 @@ export type AllOrderState = OrderState[];
 export interface AllOrderStateResponseData extends ResponseData {
   data: AllOrderState
 }
-
-
+//城市下拉单数据TS
+export interface CityItem{
+  "id": number,
+  "createTime": string,
+  "updateTime": string,
+  "isDeleted": number,
+  "param": {},
+  "parentId": number,
+  "name": string,
+  "value": string,
+  "dictCode": null,
+  "hasChildren": true
+}
+export type CityData = CityItem[]
+export interface CityInfo extends ResponseData{
+  data:CityData
+}
 
