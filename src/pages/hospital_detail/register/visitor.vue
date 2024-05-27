@@ -9,7 +9,7 @@
 
         <el-button @click="goAlter" circle type="primary" size="default" :icon="Edit"></el-button>
 
-        <el-popconfirm :title="`你确定要删除`" width="200px" v-if="route.path==='/member/patient'">
+        <el-popconfirm @confirm="delVisitor" :title="`你确定要删除`" width="200px" v-if="route.path==='/member/patient'">
           <template #reference>
             <el-button circle type="danger" size="default" :icon="Delete"></el-button>
           </template>
@@ -38,6 +38,7 @@ import {Delete, Edit} from "@element-plus/icons-vue";
 import {computed} from "vue";
 import {useRoute,useRouter} from "vue-router";
 import {useVisitorStore} from "@/store/visitorStore.ts";
+import {ElMessage} from "element-plus";
 
 const route = useRoute()
 const router = useRouter()
@@ -51,7 +52,23 @@ const goAlter=()=>{
     visitorStore.changeShow(false)
   }else {
     visitorStore.changeShow(false)
-    router.push({path:'/member/patient',query:{docId:route.query.docId}})
+    router.push({path:'/member/patient',query:{docId:route.query.docId,id:props.visitorItem.id}})
+  }
+}
+
+const delVisitor=async ()=>{
+  try {
+    await visitorStore.remove(props.visitorItem.id)
+    ElMessage({
+      type:'success',
+      message:'删除成功'
+    })
+    await visitorStore.getAllUser()
+  }catch (error) {
+    ElMessage({
+      type:'error',
+      message:'删除失败'
+    })
   }
 }
 </script>

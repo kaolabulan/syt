@@ -48,7 +48,7 @@ const submit=async ()=>{
       type:'success',
       message:visitorStore.userParams.id?'修改成功':'增加成功'
     })
-    if (route.query.docId){
+    if (route.query.docId||route.query.id){
       router.back()
     }else {
       visitorStore.changeShow(true)

@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {reqAllUser} from "@/api/member/index.ts";
+import {reqAllUser, reqRemoveUser} from "@/api/member/index.ts";
 import {AddOrUpdateUser, AllUser} from "@/api/member/type.ts";
 
 export const useVisitorStore = defineStore('Visitor',()=>{
@@ -17,6 +17,7 @@ export const useVisitorStore = defineStore('Visitor',()=>{
   }
   //要收集就诊人的数据
   const userParams = reactive<AddOrUpdateUser>({
+    id:undefined,
     name: "",
     certificatesType: "",
     certificatesNo: "",
@@ -33,9 +34,10 @@ export const useVisitorStore = defineStore('Visitor',()=>{
     contactsPhone: "",
   });
   //重构收集的就诊人数据
-  const reset=(params?:AddOrUpdateUser)=>{
+  const reset=(params?:any)=>{
     if (!params){
       Object.assign(userParams,{
+        id:undefined,
         name: "",
         certificatesType: "",
         certificatesNo: "",
@@ -55,6 +57,10 @@ export const useVisitorStore = defineStore('Visitor',()=>{
       Object.assign(userParams,params)
     }
   }
+  //删除就诊人
+  const remove =async (id:number)=>{
+    await reqRemoveUser(id)
+  }
 
   return{
     allUserInfo,
@@ -63,5 +69,6 @@ export const useVisitorStore = defineStore('Visitor',()=>{
     getAllUser,
     reset,
     changeShow,
+    remove
   }
 })

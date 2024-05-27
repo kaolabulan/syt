@@ -44,6 +44,8 @@ export const reqAddOrUpdateUser = (data: AddOrUpdateUser) => {
   }
 }
 
+//删除某一个就诊人的信息
+export const reqRemoveUser = (id:number)=>request.delete<any,any>(`/user/patient/auth/remove/${id}`)
 
 
 

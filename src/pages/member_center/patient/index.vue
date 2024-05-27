@@ -3,10 +3,28 @@ import {User} from "@element-plus/icons-vue";
 import {useVisitorStore} from "@/store/visitorStore.ts";
 import Visitor from "@/pages/hospital_detail/register/visitor.vue";
 import AlterVisitor from "@/pages/member_center/patient/alterVisitor.vue";
+import {useRoute} from "vue-router";
+const route = useRoute()
 //获取就诊人仓库
 const visitorStore = useVisitorStore()
 
-onMounted(()=>visitorStore.getAllUser())
+onMounted(()=>{
+  visitorStore.getAllUser()
+  if (route.query.docId){
+    visitorStore.changeShow(false)
+  }
+})
+
+watch(()=>visitorStore.allUserInfo, ()=>{
+  if (route.query.id){
+    visitorStore.changeShow(false)
+    const userItem = visitorStore.allUserInfo.find((item:any)=>{
+      return item.id==route.query.id
+    })
+    visitorStore.reset(userItem)
+  }
+    }
+)
 const goAdd=()=>{
   visitorStore.changeShow(false)
   visitorStore.reset()
