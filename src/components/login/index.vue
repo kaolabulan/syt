@@ -6,9 +6,11 @@
   import {reqSendPhone} from "@/api/hospital";
   import CountDown from "@/components/countdown/index.vue"
   import { ElMessage } from "element-plus";
+  import {useRouter,useRoute} from "vue-router";
 
   const userStore = useUserStore()
-
+  const route=useRoute()
+  const router=useRouter()
   //切换登录
   const loginType = ref<boolean>(true)
   const changeScene=()=>{
@@ -55,6 +57,10 @@
         message: (error as Error).message,
       });
     }
+
+    if (route.query.redirect){
+      await router.push(route.query.redirect as string)
+    }
   }
   //获取form组件实例
   const formRef = ref()
@@ -93,6 +99,7 @@
     userStore.dialogVisible=false
     close()
   }
+
 </script>
 <script lang="ts">
 export default {

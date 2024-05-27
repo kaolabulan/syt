@@ -8,13 +8,14 @@
       </el-config-provider>
     </div>
     <HospitalBottom/>
-    <Login/>
+    <Login v-if="useStore.dialogVisible"/>
   </div>
 </template>
 
 <script setup lang="ts">
 import locale from "element-plus/es/locale/lang/zh-cn";
-
+import {useUserStore} from "@/store/userStore.ts";
+const useStore = useUserStore()
 
 </script>
 

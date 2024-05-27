@@ -12,10 +12,10 @@ import 'element-plus/theme-chalk/el-message.css';
 //引入vue-router
 import router from "@/router";
 //引入pinia
-import {createPinia} from "pinia";
+//引入pinia仓库
+import pinia from '@/store'
 
 const app = createApp(App)
-const pinia = createPinia()
 //引入顶部全局组件
 app.component("HospitalTop",HospitalTop)
 app.component('HospitalBottom',HospitalBottom)
@@ -23,6 +23,7 @@ app.component('Login',Login)
 //安装vue-router
 app.use(router)
 app.use(pinia)
-
+//引入路由鉴权的文件
+import '@/permisstion.ts'
 //挂载
 app.mount('#app')

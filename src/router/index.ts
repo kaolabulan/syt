@@ -6,7 +6,10 @@ export default createRouter({
     {
       path: '/home',
       //路由懒加载
-      component: () => import('@/pages/home/index.vue')
+      component: () => import('@/pages/home/index.vue'),
+      meta:{
+        title:'首页'
+      }
     },
     {
       path:'/hospital',
@@ -14,31 +17,52 @@ export default createRouter({
       children:[
         {
           path:'',
-          component:()=>import('@/pages/hospital_detail/register/index.vue')
+          component:()=>import('@/pages/hospital_detail/register/index.vue'),
+          meta:{
+            title:'预约挂号'
+          }
         },
         {
           path:'detail',
-          component:()=>import('@/pages/hospital_detail/detail/index.vue')
+          component:()=>import('@/pages/hospital_detail/detail/index.vue'),
+          meta:{
+            title:'医院详情'
+          }
         },
         {
           path:'notice',
-          component:()=>import('@/pages/hospital_detail/notice/index.vue')
+          component:()=>import('@/pages/hospital_detail/notice/index.vue'),
+          meta:{
+            title:'预约通知'
+          }
         },
         {
           path:'close',
-          component:()=>import('@/pages/hospital_detail/close/index.vue')
+          component:()=>import('@/pages/hospital_detail/close/index.vue'),
+          meta:{
+            title:'停诊信息'
+          }
         },
         {
           path:'search',
-          component:()=>import('@/pages/hospital_detail/search/index.vue')
+          component:()=>import('@/pages/hospital_detail/search/index.vue'),
+          meta:{
+            title:'查询'
+          }
         },
         {
           path:'step1',
-          component:()=>import('@/pages/hospital_detail/register/step1.vue')
+          component:()=>import('@/pages/hospital_detail/register/step1.vue'),
+          meta:{
+            title:'挂号步骤1'
+          }
         },
         {
           path:'step2',
-          component:()=>import('@/pages/hospital_detail/register/step2.vue')
+          component:()=>import('@/pages/hospital_detail/register/step2.vue'),
+          meta:{
+            title:'挂号步骤2'
+          }
         },
 
       ]
